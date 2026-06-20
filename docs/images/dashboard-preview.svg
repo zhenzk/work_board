@@ -1,0 +1,64 @@
+<svg width="1280" height="720" viewBox="0 0 1280 720" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Kanban dashboard preview</title>
+  <desc id="desc">A clean dashboard preview with project metrics and focus cards.</desc>
+  <rect width="1280" height="720" rx="28" fill="#F5F5F7"/>
+  <rect x="32" y="28" width="1216" height="64" rx="18" fill="white" stroke="#E5E5EA"/>
+  <circle cx="72" cy="60" r="18" fill="#1D1D1F"/>
+  <text x="72" y="66" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="16" font-weight="700" fill="white">K</text>
+  <text x="104" y="66" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="18" font-weight="700" fill="#1D1D1F">Kanban Worker</text>
+  <rect x="1034" y="46" width="88" height="28" rx="14" fill="#F2F2F7"/>
+  <text x="1078" y="65" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="12" fill="#6E6E73">Guest</text>
+  <rect x="1134" y="46" width="82" height="28" rx="14" fill="#007AFF"/>
+  <text x="1175" y="65" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="12" font-weight="700" fill="white">Export</text>
+
+  <rect x="48" y="120" width="760" height="392" rx="18" fill="white" stroke="#E5E5EA"/>
+  <text x="88" y="172" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="48" font-weight="800" fill="#1D1D1F">Annual Work Board</text>
+  <text x="88" y="208" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="18" fill="#6E6E73">Track projects, overdue verification tasks, monthly plans and yearly progress.</text>
+  <g>
+    <rect x="88" y="256" width="146" height="102" rx="16" fill="#F9F9FB" stroke="#E5E5EA"/>
+    <text x="112" y="298" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="32" font-weight="800" fill="#1D1D1F">12</text>
+    <text x="112" y="328" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="14" fill="#8E8E93">Projects</text>
+    <rect x="252" y="256" width="146" height="102" rx="16" fill="#F9F9FB" stroke="#E5E5EA"/>
+    <text x="276" y="298" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="32" font-weight="800" fill="#007AFF">48</text>
+    <text x="276" y="328" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="14" fill="#8E8E93">Tasks</text>
+    <rect x="416" y="256" width="146" height="102" rx="16" fill="#F9F9FB" stroke="#E5E5EA"/>
+    <text x="440" y="298" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="32" font-weight="800" fill="#34C759">76%</text>
+    <text x="440" y="328" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="14" fill="#8E8E93">Progress</text>
+    <rect x="580" y="256" width="146" height="102" rx="16" fill="#F9F9FB" stroke="#E5E5EA"/>
+    <text x="604" y="298" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="32" font-weight="800" fill="#FF9500">5</text>
+    <text x="604" y="328" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="14" fill="#8E8E93">Verify</text>
+  </g>
+  <rect x="88" y="408" width="640" height="10" rx="5" fill="#E5E5EA"/>
+  <rect x="88" y="408" width="486" height="10" rx="5" fill="#34C759"/>
+
+  <rect x="832" y="120" width="400" height="392" rx="18" fill="white" stroke="#E5E5EA"/>
+  <text x="864" y="160" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="18" font-weight="800" fill="#1D1D1F">Focus Projects</text>
+  <g>
+    <rect x="864" y="184" width="336" height="70" rx="14" fill="#F9F9FB" stroke="#E5E5EA"/>
+    <circle cx="896" cy="219" r="17" fill="#E8F2FF"/>
+    <text x="896" y="225" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="14" font-weight="800" fill="#007AFF">A</text>
+    <text x="928" y="213" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="15" font-weight="700" fill="#1D1D1F">Operations Platform</text>
+    <text x="928" y="235" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="12" fill="#8E8E93">Doing · 8 tasks · 65%</text>
+    <rect x="864" y="270" width="336" height="70" rx="14" fill="#F9F9FB" stroke="#E5E5EA"/>
+    <circle cx="896" cy="305" r="17" fill="#EAF9EE"/>
+    <text x="896" y="311" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="14" font-weight="800" fill="#34C759">B</text>
+    <text x="928" y="299" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="15" font-weight="700" fill="#1D1D1F">Quality Dashboard</text>
+    <text x="928" y="321" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="12" fill="#8E8E93">Verify · 3 tasks · 82%</text>
+    <rect x="864" y="356" width="336" height="70" rx="14" fill="#F9F9FB" stroke="#E5E5EA"/>
+    <circle cx="896" cy="391" r="17" fill="#FFF4E5"/>
+    <text x="896" y="397" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="14" font-weight="800" fill="#FF9500">C</text>
+    <text x="928" y="385" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="15" font-weight="700" fill="#1D1D1F">Energy Module</text>
+    <text x="928" y="407" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="12" fill="#8E8E93">Todo · 6 tasks · 20%</text>
+  </g>
+
+  <rect x="48" y="540" width="1184" height="120" rx="18" fill="white" stroke="#E5E5EA"/>
+  <text x="84" y="584" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="18" font-weight="800" fill="#1D1D1F">Project Timeline</text>
+  <rect x="84" y="612" width="156" height="28" rx="14" fill="#E8F2FF"/>
+  <text x="162" y="631" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="12" fill="#007AFF">Q1 planning</text>
+  <rect x="260" y="612" width="188" height="28" rx="14" fill="#EAF9EE"/>
+  <text x="354" y="631" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="12" fill="#34C759">Q2 delivery</text>
+  <rect x="468" y="612" width="164" height="28" rx="14" fill="#FFF4E5"/>
+  <text x="550" y="631" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="12" fill="#FF9500">Verification</text>
+  <rect x="652" y="612" width="176" height="28" rx="14" fill="#F2EAFE"/>
+  <text x="740" y="631" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="12" fill="#AF52DE">Operations</text>
+</svg>

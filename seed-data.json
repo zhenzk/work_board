@@ -1,0 +1,881 @@
+{
+  "meta": {
+    "source": "user provided project and task data",
+    "exportDate": "2026-06-19",
+    "version": "2026.06.19",
+    "description": "看板系统初始化数据，包含11个项目和对应任务；长期/暂无结束时间按2026-12-31作为系统截止日期，原始说明保留在description/overview中。"
+  },
+  "users": [
+    {
+      "username": "admin",
+      "displayName": "管理员",
+      "role": "admin",
+      "avatar": "管"
+    }
+  ],
+  "projects": [
+    {
+      "key": "efficiency-management",
+      "name": "效率管理",
+      "icon": "效",
+      "color": "amber",
+      "description": "已完成所有基础模块功能开发上线测试环境，运维处理",
+      "startDate": "2026-03-30",
+      "endDate": "2026-12-31",
+      "overview": {
+        "status": "运维阶段",
+        "priority": "P0",
+        "roles": "开发",
+        "summary": "已完成所有基础模块功能开发上线测试环境，运维处理",
+        "originalEndDate": "长期"
+      },
+      "tasks": [
+        {
+          "title": "开发效率标准模块",
+          "description": "系统：MES",
+          "status": "done",
+          "priority": "low",
+          "originalPriority": "P3",
+          "startDate": "2025-11-25",
+          "deadline": "2025-12-31",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "开发效率监控模块",
+          "description": "系统：MES",
+          "status": "done",
+          "priority": "low",
+          "originalPriority": "P3",
+          "startDate": "2025-11-25",
+          "deadline": "2025-12-31",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "开发效率计算结果模块",
+          "description": "系统：MES",
+          "status": "done",
+          "priority": "low",
+          "originalPriority": "P3",
+          "startDate": "2025-11-25",
+          "deadline": "2025-12-31",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "效率定时任务，开发工厂级别定时任务",
+          "description": "系统：MES",
+          "status": "done",
+          "priority": "low",
+          "originalPriority": "P3",
+          "startDate": "2025-11-25",
+          "deadline": "2025-12-31",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "效率对接原液奶采集系统",
+          "description": "系统：MES",
+          "status": "done",
+          "priority": "low",
+          "originalPriority": "P3",
+          "startDate": "2025-11-25",
+          "deadline": "2025-12-31",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "开发对接IOT平台采集系统",
+          "description": "系统：MES",
+          "status": "done",
+          "priority": "low",
+          "originalPriority": "P3",
+          "startDate": "2026-02-11",
+          "deadline": "2026-02-26",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "开发IOT平台数据转发，支持数据存工厂同步推送集团",
+          "description": "系统：其他",
+          "status": "done",
+          "priority": "high",
+          "originalPriority": "P0",
+          "startDate": "2026-03-23",
+          "deadline": "2026-03-23",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "开发效率标准模块",
+          "description": "系统：MOM",
+          "status": "done",
+          "priority": "high",
+          "originalPriority": "P0",
+          "startDate": "2026-03-30",
+          "deadline": "2026-04-22",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "效率监控模块，收集边缘网关数据",
+          "description": "系统：MOM",
+          "status": "done",
+          "priority": "high",
+          "originalPriority": "P0",
+          "startDate": "2026-03-30",
+          "deadline": "2026-04-22",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "效率计算结果模块",
+          "description": "系统：MOM",
+          "status": "done",
+          "priority": "high",
+          "originalPriority": "P0",
+          "startDate": "2026-03-30",
+          "deadline": "2026-04-22",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "效率定时任务",
+          "description": "系统：MOM",
+          "status": "done",
+          "priority": "medium",
+          "originalPriority": "P2",
+          "startDate": "2026-04-28",
+          "deadline": "2026-05-09",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "正式环境IOT平台",
+          "description": "系统：MOM；原始完成时间为空，按长期任务处理。",
+          "status": "doing",
+          "priority": "high",
+          "originalPriority": "P0",
+          "startDate": "2026-03-30",
+          "deadline": "2026-12-31",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "BI看板挂载，持续挂载帆软效率看板",
+          "description": "系统：MOM；状态：持续跟进",
+          "status": "verify",
+          "priority": "low",
+          "originalPriority": "P3",
+          "startDate": "2026-04-17",
+          "deadline": "2026-05-09",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "配合苏州工厂",
+          "description": "系统：MOM",
+          "status": "done",
+          "priority": "medium",
+          "originalPriority": "P2",
+          "startDate": "2026-06-01",
+          "deadline": "2026-06-06",
+          "assignedTo": "admin"
+        }
+      ],
+      "status": "运维阶段",
+      "projectPriority": "P0",
+      "role": "开发",
+      "originalEndDate": "长期"
+    },
+    {
+      "key": "quality-management",
+      "name": "质量管理",
+      "icon": "质",
+      "color": "red",
+      "description": "暂定第三方开发",
+      "startDate": "2026-04-15",
+      "endDate": "2026-04-29",
+      "overview": {
+        "status": "已暂停",
+        "priority": "P3",
+        "roles": "推进",
+        "summary": "暂定第三方开发"
+      },
+      "tasks": [],
+      "status": "已暂停",
+      "projectPriority": "P3",
+      "role": "推进",
+      "originalEndDate": ""
+    },
+    {
+      "key": "cost-module",
+      "name": "成本模块",
+      "icon": "本",
+      "color": "purple",
+      "description": "暂未提供看板，已沟通",
+      "startDate": "2026-01-12",
+      "endDate": "2026-06-30",
+      "overview": {
+        "status": "未开始",
+        "priority": "P3",
+        "roles": "推进",
+        "summary": "暂未提供看板，已沟通"
+      },
+      "tasks": [],
+      "status": "未开始",
+      "projectPriority": "P3",
+      "role": "推进",
+      "originalEndDate": ""
+    },
+    {
+      "key": "equipment-management",
+      "name": "设备管理",
+      "icon": "设",
+      "color": "cyan",
+      "description": "按照优先级排期开发",
+      "startDate": "2025-11-11",
+      "endDate": "2026-12-31",
+      "overview": {
+        "status": "进行中",
+        "priority": "P0",
+        "roles": "推进+开发",
+        "summary": "按照优先级排期开发",
+        "originalEndDate": "长期"
+      },
+      "tasks": [
+        {
+          "title": "设备大修整体按照酸奶规范调整第一版，涉及多个模块修改。",
+          "description": "系统：MOM",
+          "status": "done",
+          "priority": "high",
+          "originalPriority": "P0",
+          "startDate": "2025-12-10",
+          "deadline": "2026-01-22",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "质量需求调整设备大修逻辑，要求有按照自然天生成设备大修的情况",
+          "description": "系统：MOM",
+          "status": "done",
+          "priority": "high",
+          "originalPriority": "P0",
+          "startDate": "2026-05-12",
+          "deadline": "2026-05-12",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "不同维护周期出现在同一个工单，导致计划时间不准确问题",
+          "description": "系统：MOM",
+          "status": "done",
+          "priority": "high",
+          "originalPriority": "P0",
+          "startDate": "2026-05-11",
+          "deadline": "2026-05-11",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "计划工单页面能否显示下次维护间隔时间",
+          "description": "系统：MOM",
+          "status": "done",
+          "priority": "medium",
+          "originalPriority": "P2",
+          "startDate": "2026-05-13",
+          "deadline": "2026-06-01",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "设备运行时长采集报表导出功能",
+          "description": "系统：MOM",
+          "status": "done",
+          "priority": "medium",
+          "originalPriority": "P2",
+          "startDate": "2026-05-13",
+          "deadline": "2026-06-01",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "点击领料单不显示备件问题",
+          "description": "系统：MOM",
+          "status": "done",
+          "priority": "medium",
+          "originalPriority": "P2",
+          "startDate": "2026-05-14",
+          "deadline": "2026-06-01",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "一个大修会有多个领料单推送wms，增加库管员工作",
+          "description": "系统：MOM；状态：持续跟进",
+          "status": "verify",
+          "priority": "high",
+          "originalPriority": "P1",
+          "startDate": "2026-05-13",
+          "deadline": "2026-05-21",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "新增具体使用位置（设备系统）",
+          "description": "系统：MOM",
+          "status": "done",
+          "priority": "high",
+          "originalPriority": "P1",
+          "startDate": "2026-06-09",
+          "deadline": "2026-06-10",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "紧急修复APP的大修工单不能同步WMS问题",
+          "description": "系统：mom",
+          "status": "done",
+          "priority": "high",
+          "originalPriority": "P0",
+          "startDate": "2026-06-19",
+          "deadline": "2026-06-19",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "紧急修改大修工单出现的WMS领料单，备件重复问题",
+          "description": "系统：mom",
+          "status": "done",
+          "priority": "high",
+          "originalPriority": "P0",
+          "startDate": "2026-06-19",
+          "deadline": "2026-06-19",
+          "assignedTo": "admin"
+        }
+      ],
+      "status": "进行中",
+      "projectPriority": "P0",
+      "role": "推进+开发",
+      "originalEndDate": "长期"
+    },
+    {
+      "key": "lean-management",
+      "name": "精益管理",
+      "icon": "精",
+      "color": "green",
+      "description": "按照优先级排期开发",
+      "startDate": "2026-02-26",
+      "endDate": "2026-12-31",
+      "overview": {
+        "status": "进行中",
+        "priority": "P1",
+        "roles": "推进+开发",
+        "summary": "按照优先级排期开发",
+        "originalEndDate": "长期"
+      },
+      "tasks": [
+        {
+          "title": "复制精益战略管理",
+          "description": "系统：MOM；原始开始时间为空。",
+          "status": "done",
+          "priority": "high",
+          "originalPriority": "P1",
+          "startDate": "",
+          "deadline": "2026-02-26",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "复制精益指标管理",
+          "description": "系统：MOM；原始开始时间为空。",
+          "status": "done",
+          "priority": "high",
+          "originalPriority": "P1",
+          "startDate": "",
+          "deadline": "2026-03-04",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "复制精益计划管理",
+          "description": "系统：MOM；原始开始时间为空。",
+          "status": "done",
+          "priority": "medium",
+          "originalPriority": "P2",
+          "startDate": "",
+          "deadline": "2026-03-16",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "复制精益变革管理",
+          "description": "系统：MOM；原始开始时间为空。",
+          "status": "done",
+          "priority": "medium",
+          "originalPriority": "P2",
+          "startDate": "",
+          "deadline": "2026-03-19",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "撤销精益计划、变革模块",
+          "description": "系统：MOM；原始开始时间为空。",
+          "status": "done",
+          "priority": "high",
+          "originalPriority": "P0",
+          "startDate": "",
+          "deadline": "2026-04-15",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "上线精益计划、变革模块",
+          "description": "系统：MOM；原始开始时间为空。",
+          "status": "done",
+          "priority": "high",
+          "originalPriority": "P0",
+          "startDate": "",
+          "deadline": "2026-05-06",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "修复本次使用中出现的各种问题，添加KPI和KMI",
+          "description": "系统：MOM",
+          "status": "done",
+          "priority": "high",
+          "originalPriority": "P0",
+          "startDate": "2026-05-25",
+          "deadline": "2026-05-26",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "一页纸章程替换酸奶标准",
+          "description": "系统：MOM",
+          "status": "done",
+          "priority": "high",
+          "originalPriority": "P0",
+          "startDate": "2026-05-25",
+          "deadline": "2026-05-26",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "重点工作批量审核失败问题",
+          "description": "系统：MOM",
+          "status": "done",
+          "priority": "high",
+          "originalPriority": "P0",
+          "startDate": "2026-06-09",
+          "deadline": "2026-06-10",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "重点工作审核提交审核提示当前月是空的问题",
+          "description": "系统：MOM",
+          "status": "done",
+          "priority": "high",
+          "originalPriority": "P0",
+          "startDate": "2026-06-15",
+          "deadline": "2026-06-16",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "创建酸奶精益管理整体架构图",
+          "description": "系统：mom；原始日期未提供。",
+          "status": "todo",
+          "priority": "medium",
+          "originalPriority": "",
+          "startDate": "",
+          "deadline": "2026-12-31",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "优化精益提示录入方针限制（字数）",
+          "description": "系统：mom；原始日期未提供。",
+          "status": "todo",
+          "priority": "medium",
+          "originalPriority": "",
+          "startDate": "",
+          "deadline": "2026-12-31",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "精益管理全国工厂培训",
+          "description": "系统：mom；原始完成时间：长期。",
+          "status": "doing",
+          "priority": "medium",
+          "originalPriority": "",
+          "startDate": "2026-06-15",
+          "deadline": "2026-12-31",
+          "assignedTo": "admin"
+        }
+      ],
+      "status": "进行中",
+      "projectPriority": "P1",
+      "role": "推进+开发",
+      "originalEndDate": "长期"
+    },
+    {
+      "key": "preprocessing-energy-efficiency",
+      "name": "前处理能源效能模块",
+      "icon": "能",
+      "color": "teal",
+      "description": "已提供初版需求",
+      "startDate": "2026-04-27",
+      "endDate": "2026-12-31",
+      "overview": {
+        "status": "进行中",
+        "priority": "P3",
+        "roles": "推进+开发+主导",
+        "summary": "已提供初版需求",
+        "originalEndDate": "暂无结束时间"
+      },
+      "tasks": [
+        {
+          "title": "金山cip清洗逻辑梳理",
+          "description": "系统：mom",
+          "status": "done",
+          "priority": "high",
+          "originalPriority": "P0",
+          "startDate": "2026-06-15",
+          "deadline": "2026-06-19",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "设计CIP清洗表结构",
+          "description": "系统：mom",
+          "status": "done",
+          "priority": "high",
+          "originalPriority": "P0",
+          "startDate": "2026-06-15",
+          "deadline": "2026-06-19",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "开发CIP清洗树状配置页面",
+          "description": "系统：mom",
+          "status": "done",
+          "priority": "high",
+          "originalPriority": "P0",
+          "startDate": "2026-06-15",
+          "deadline": "2026-06-19",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "开发CIP清洗配置点位逻辑",
+          "description": "系统：mom",
+          "status": "done",
+          "priority": "high",
+          "originalPriority": "P0",
+          "startDate": "2026-06-15",
+          "deadline": "2026-06-19",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "开发cip后端定时任务采集点位",
+          "description": "系统：mom",
+          "status": "doing",
+          "priority": "medium",
+          "originalPriority": "",
+          "startDate": "2026-06-22",
+          "deadline": "2026-06-26",
+          "assignedTo": "admin"
+        }
+      ],
+      "status": "进行中",
+      "projectPriority": "P3",
+      "role": "推进+开发+主导",
+      "originalEndDate": "暂无结束时间"
+    },
+    {
+      "key": "project-management",
+      "name": "项目管理",
+      "icon": "项",
+      "color": "purple",
+      "description": "已提供初版需求",
+      "startDate": "2026-02-03",
+      "endDate": "2026-12-31",
+      "overview": {
+        "status": "未开始",
+        "priority": "P3",
+        "roles": "推进+开发",
+        "summary": "已提供初版需求",
+        "originalEndDate": "暂无结束时间"
+      },
+      "tasks": [
+        {
+          "title": "表结构生成",
+          "description": "系统：MOM",
+          "status": "done",
+          "priority": "medium",
+          "originalPriority": "",
+          "startDate": "2026-06-02",
+          "deadline": "2026-06-02",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "需求梳理",
+          "description": "系统：MOM",
+          "status": "done",
+          "priority": "medium",
+          "originalPriority": "",
+          "startDate": "2026-06-10",
+          "deadline": "2026-06-12",
+          "assignedTo": "admin"
+        }
+      ],
+      "status": "未开始",
+      "projectPriority": "P3",
+      "role": "推进+开发",
+      "originalEndDate": "暂无结束时间"
+    },
+    {
+      "key": "bi-dashboard-training",
+      "name": "BI看板培训",
+      "icon": "BI",
+      "color": "amber",
+      "description": "已配置商情通，赋能帆软report，后续有相关需求可以配置MOM挂载功能，由工厂负责开发",
+      "startDate": "2026-04-06",
+      "endDate": "2026-12-31",
+      "overview": {
+        "status": "已暂停",
+        "priority": "P3",
+        "roles": "推进",
+        "summary": "已配置商情通，赋能帆软report，后续有相关需求可以配置MOM挂载功能，由工厂负责开发",
+        "originalEndDate": "暂无结束时间"
+      },
+      "tasks": [],
+      "status": "已暂停",
+      "projectPriority": "P3",
+      "role": "推进",
+      "originalEndDate": "暂无结束时间"
+    },
+    {
+      "key": "smart-cabinet",
+      "name": "智能机柜项目",
+      "icon": "柜",
+      "color": "green",
+      "description": "测试环境已上线",
+      "startDate": "2026-05-02",
+      "endDate": "2026-07-01",
+      "overview": {
+        "status": "进行中",
+        "priority": "P1",
+        "roles": "推进+开发",
+        "summary": "测试环境已上线"
+      },
+      "tasks": [
+        {
+          "title": "智能机柜前期调研",
+          "description": "系统：MOM",
+          "status": "done",
+          "priority": "medium",
+          "originalPriority": "P2",
+          "startDate": "2026-04-22",
+          "deadline": "2026-04-24",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "开发智能机柜机柜管理",
+          "description": "系统：MOM",
+          "status": "done",
+          "priority": "medium",
+          "originalPriority": "P2",
+          "startDate": "2026-05-02",
+          "deadline": "2026-05-08",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "开发机柜下发日志发送控制信号",
+          "description": "系统：MOM",
+          "status": "done",
+          "priority": "medium",
+          "originalPriority": "P2",
+          "startDate": "2026-05-02",
+          "deadline": "2026-05-08",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "开发机柜发送信号MOM系统接收验证模块",
+          "description": "系统：MOM",
+          "status": "done",
+          "priority": "medium",
+          "originalPriority": "P2",
+          "startDate": "2026-05-02",
+          "deadline": "2026-05-08",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "开发机柜需要的三大同步接口",
+          "description": "系统：MOM",
+          "status": "done",
+          "priority": "medium",
+          "originalPriority": "P2",
+          "startDate": "2026-05-02",
+          "deadline": "2026-05-08",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "WMS领料单实现开柜关柜逻辑，手机端同步实现,等待验证",
+          "description": "系统：MOM；原始完成时间为空。",
+          "status": "doing",
+          "priority": "medium",
+          "originalPriority": "P2",
+          "startDate": "2026-05-11",
+          "deadline": "2026-12-31",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "硬件到货，硬件联通性测试",
+          "description": "系统：MOM；原始优先级为空。",
+          "status": "done",
+          "priority": "medium",
+          "originalPriority": "",
+          "startDate": "2026-05-22",
+          "deadline": "2026-05-25",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "机柜厂家提供手册，MOM联调",
+          "description": "系统：MOM；原始数据中完成时间为空，后附日期2026/06/15，按完成时间处理。",
+          "status": "done",
+          "priority": "medium",
+          "originalPriority": "",
+          "startDate": "2026-05-25",
+          "deadline": "2026-06-15",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "MOM和机柜系统联调",
+          "description": "系统：MOM；原始优先级为空。",
+          "status": "done",
+          "priority": "medium",
+          "originalPriority": "",
+          "startDate": "2026-06-15",
+          "deadline": "2026-06-18",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "MOM搭建MQTT服务,正式环境协调数科",
+          "description": "系统：MOM；原始日期和优先级为空。",
+          "status": "todo",
+          "priority": "medium",
+          "originalPriority": "",
+          "startDate": "",
+          "deadline": "2026-12-31",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "修改厂家同步接口问题，同步推进到环境上再测试",
+          "description": "系统：MOM；原始优先级为空。",
+          "status": "done",
+          "priority": "medium",
+          "originalPriority": "",
+          "startDate": "2026-06-11",
+          "deadline": "2026-06-12",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "沈阳测试环境走一遍流程，按照使用情况进行优化逻辑",
+          "description": "系统：mom；原始完成时间为空。",
+          "status": "doing",
+          "priority": "medium",
+          "originalPriority": "",
+          "startDate": "2026-06-22",
+          "deadline": "2026-12-31",
+          "assignedTo": "admin"
+        }
+      ],
+      "status": "进行中",
+      "projectPriority": "P1",
+      "role": "推进+开发",
+      "originalEndDate": ""
+    },
+    {
+      "key": "mes-shift-handover",
+      "name": "MES交接班模块",
+      "icon": "交",
+      "color": "cyan",
+      "description": "已完成全国推广，后续可能再次改造",
+      "startDate": "2025-11-13",
+      "endDate": "2026-04-28",
+      "overview": {
+        "status": "已完成",
+        "priority": "P3",
+        "roles": "主导",
+        "summary": "已完成全国推广，后续可能再次改造"
+      },
+      "tasks": [],
+      "status": "已完成",
+      "projectPriority": "P3",
+      "role": "主导",
+      "originalEndDate": ""
+    },
+    {
+      "key": "realtime-monitoring",
+      "name": "实时监控模块",
+      "icon": "监",
+      "color": "red",
+      "description": "已完成后续优化",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-07",
+      "overview": {
+        "status": "进行中",
+        "priority": "P0",
+        "roles": "主导",
+        "summary": "已完成后续优化"
+      },
+      "tasks": [
+        {
+          "title": "对接实时接口",
+          "description": "系统：MOM",
+          "status": "done",
+          "priority": "high",
+          "originalPriority": "P0",
+          "startDate": "2026-06-01",
+          "deadline": "2026-06-06",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "实时点位配置功能",
+          "description": "系统：MOM",
+          "status": "done",
+          "priority": "high",
+          "originalPriority": "P0",
+          "startDate": "2026-06-01",
+          "deadline": "2026-06-06",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "定时任务实时监测计划",
+          "description": "系统：MOM；状态：持续跟进",
+          "status": "verify",
+          "priority": "high",
+          "originalPriority": "P0",
+          "startDate": "2026-06-01",
+          "deadline": "2026-06-06",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "异常记录功能",
+          "description": "系统：MOM",
+          "status": "done",
+          "priority": "high",
+          "originalPriority": "P0",
+          "startDate": "2026-06-01",
+          "deadline": "2026-06-06",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "监测工单功能",
+          "description": "系统：MOM；状态：持续跟进",
+          "status": "verify",
+          "priority": "high",
+          "originalPriority": "P0",
+          "startDate": "2026-06-01",
+          "deadline": "2026-06-06",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "推送企微，需要上线正式环境查看结果",
+          "description": "系统：MOM；状态：持续跟进",
+          "status": "verify",
+          "priority": "high",
+          "originalPriority": "P0",
+          "startDate": "2026-06-01",
+          "deadline": "2026-06-06",
+          "assignedTo": "admin"
+        },
+        {
+          "title": "原来逻辑采用实时接口，对iot平台造成压力，重新进行优化",
+          "description": "系统：mom；原始完成时间为空。",
+          "status": "todo",
+          "priority": "medium",
+          "originalPriority": "",
+          "startDate": "2026-06-22",
+          "deadline": "2026-12-31",
+          "assignedTo": "admin"
+        }
+      ],
+      "status": "进行中",
+      "projectPriority": "P0",
+      "role": "主导",
+      "originalEndDate": ""
+    }
+  ]
+}

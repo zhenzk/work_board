@@ -1,0 +1,62 @@
+<svg width="1280" height="720" viewBox="0 0 1280 720" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Monthly kanban board preview</title>
+  <desc id="desc">A kanban board with four columns and sanitized demo tasks.</desc>
+  <rect width="1280" height="720" rx="28" fill="#F5F5F7"/>
+  <rect x="40" y="36" width="1200" height="74" rx="18" fill="white" stroke="#E5E5EA"/>
+  <text x="76" y="82" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="24" font-weight="800" fill="#1D1D1F">2026 · July Board</text>
+  <rect x="1014" y="58" width="82" height="30" rx="15" fill="#E8F2FF"/>
+  <text x="1055" y="78" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="12" fill="#007AFF">Month</text>
+  <rect x="1104" y="58" width="82" height="30" rx="15" fill="#F2F2F7"/>
+  <text x="1145" y="78" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="12" fill="#6E6E73">Year</text>
+
+  <rect x="40" y="132" width="1200" height="42" rx="12" fill="#FFF4E5" stroke="#FFE2B8"/>
+  <text x="70" y="158" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="14" font-weight="700" fill="#8A5A00">验证中逾期 2 项已持续显示，直到完成或调整截止日期。</text>
+
+  <g font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif">
+    <rect x="40" y="198" width="285" height="470" rx="18" fill="white" stroke="#E5E5EA"/>
+    <circle cx="70" cy="232" r="5" fill="#8E8E93"/>
+    <text x="88" y="237" font-size="16" font-weight="800" fill="#1D1D1F">待启动</text>
+    <text x="286" y="237" font-size="12" fill="#8E8E93">3</text>
+    <rect x="64" y="268" width="237" height="82" rx="14" fill="#F9F9FB" stroke="#E5E5EA"/>
+    <text x="84" y="298" font-size="14" font-weight="700" fill="#1D1D1F">Draft project scope</text>
+    <text x="84" y="324" font-size="12" fill="#8E8E93">7/12 · P2</text>
+    <rect x="64" y="366" width="237" height="82" rx="14" fill="#F9F9FB" stroke="#E5E5EA"/>
+    <text x="84" y="396" font-size="14" font-weight="700" fill="#1D1D1F">Prepare rollout plan</text>
+    <text x="84" y="422" font-size="12" fill="#8E8E93">7/18 · P3</text>
+
+    <rect x="347" y="198" width="285" height="470" rx="18" fill="white" stroke="#E5E5EA"/>
+    <circle cx="377" cy="232" r="5" fill="#007AFF"/>
+    <text x="395" y="237" font-size="16" font-weight="800" fill="#1D1D1F">进行中</text>
+    <text x="593" y="237" font-size="12" fill="#8E8E93">4</text>
+    <rect x="371" y="268" width="237" height="92" rx="14" fill="#F9F9FB" stroke="#E5E5EA"/>
+    <text x="391" y="298" font-size="14" font-weight="700" fill="#1D1D1F">Build task workflow</text>
+    <text x="391" y="324" font-size="12" fill="#8E8E93">7/08 · P1</text>
+    <rect x="371" y="376" width="237" height="92" rx="14" fill="#F9F9FB" stroke="#E5E5EA"/>
+    <text x="391" y="406" font-size="14" font-weight="700" fill="#1D1D1F">Improve export format</text>
+    <text x="391" y="432" font-size="12" fill="#8E8E93">7/16 · P2</text>
+
+    <rect x="654" y="198" width="285" height="470" rx="18" fill="white" stroke="#E5E5EA"/>
+    <circle cx="684" cy="232" r="5" fill="#FF9500"/>
+    <text x="702" y="237" font-size="16" font-weight="800" fill="#1D1D1F">验证中</text>
+    <text x="900" y="237" font-size="12" fill="#8E8E93">2</text>
+    <rect x="678" y="268" width="237" height="100" rx="14" fill="#FFF9F0" stroke="#FFE2B8"/>
+    <text x="698" y="298" font-size="14" font-weight="700" fill="#1D1D1F">Review release result</text>
+    <text x="698" y="324" font-size="12" fill="#FF3B30">Overdue 5d</text>
+    <rect x="698" y="340" width="62" height="20" rx="10" fill="#FFECEC"/>
+    <text x="729" y="354" text-anchor="middle" font-size="10" font-weight="700" fill="#FF3B30">逾期</text>
+    <rect x="678" y="384" width="237" height="100" rx="14" fill="#FFF9F0" stroke="#FFE2B8"/>
+    <text x="698" y="414" font-size="14" font-weight="700" fill="#1D1D1F">Factory acceptance</text>
+    <text x="698" y="440" font-size="12" fill="#FF3B30">Overdue 1d</text>
+
+    <rect x="961" y="198" width="279" height="470" rx="18" fill="white" stroke="#E5E5EA"/>
+    <circle cx="991" cy="232" r="5" fill="#34C759"/>
+    <text x="1009" y="237" font-size="16" font-weight="800" fill="#1D1D1F">已完成</text>
+    <text x="1200" y="237" font-size="12" fill="#8E8E93">6</text>
+    <rect x="985" y="268" width="231" height="82" rx="14" fill="#F9F9FB" stroke="#E5E5EA"/>
+    <text x="1005" y="298" font-size="14" font-weight="700" fill="#1D1D1F">Ship dashboard</text>
+    <text x="1005" y="324" font-size="12" fill="#34C759">Done · 7/03</text>
+    <rect x="985" y="366" width="231" height="82" rx="14" fill="#F9F9FB" stroke="#E5E5EA"/>
+    <text x="1005" y="396" font-size="14" font-weight="700" fill="#1D1D1F">Close feedback</text>
+    <text x="1005" y="422" font-size="12" fill="#34C759">Done · 7/10</text>
+  </g>
+</svg>

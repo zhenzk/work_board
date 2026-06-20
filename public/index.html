@@ -1,0 +1,2162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>项目工作看板</title>
+<script>
+try { document.documentElement.dataset.theme = localStorage.getItem('kanban_theme') || 'light'; } catch (_) {}
+</script>
+<style>
+:root {
+  --bg: #f5f5f7;
+  --bg2: #ffffff;
+  --bg3: #f2f2f7;
+  --surface: #ffffff;
+  --surface-hover: #fbfbfd;
+  --border: rgba(0,0,0,0.08);
+  --border-hover: rgba(0,0,0,0.14);
+  --border-active: rgba(0,122,255,0.28);
+  --text: #1d1d1f;
+  --text2: #6e6e73;
+  --text3: #8e8e93;
+  --cyan: #007aff;
+  --cyan2: #006edb;
+  --cyan-dim: rgba(0,122,255,0.08);
+  --green: #34c759;
+  --green-dim: rgba(52,199,89,0.1);
+  --amber: #ff9500;
+  --amber-dim: rgba(255,149,0,0.1);
+  --red: #ff3b30;
+  --red-dim: rgba(255,59,48,0.1);
+  --purple: #af52de;
+  --purple-dim: rgba(175,82,222,0.1);
+  --brand: #1d1d1f;
+  --header-bg: rgba(255,255,255,0.82);
+  --scroll-thumb: rgba(0,0,0,0.16);
+  --scroll-thumb-hover: rgba(0,0,0,0.26);
+  --soft-hover: rgba(0,0,0,0.035);
+  --subtle-fill: rgba(0,0,0,0.025);
+  --track: rgba(0,0,0,0.08);
+  --dash: rgba(0,0,0,0.16);
+  --col-bg: rgba(255,255,255,0.56);
+  --modal-backdrop: rgba(0,0,0,0.22);
+  --guest-bg: rgba(0,122,255,0.06);
+  --radius: 8px;
+  --radius-sm: 8px;
+  --radius-lg: 8px;
+  --mono: 'SF Mono', ui-monospace, Menlo, Consolas, monospace;
+  --sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05), 0 8px 24px rgba(0,0,0,0.04);
+  --shadow-md: 0 2px 4px rgba(0,0,0,0.05), 0 14px 34px rgba(0,0,0,0.08);
+  --shadow-lg: 0 4px 10px rgba(0,0,0,0.08), 0 24px 60px rgba(0,0,0,0.12);
+  --transition-fast: 0.12s ease;
+  --transition: 0.2s ease;
+  --transition-slow: 0.35s cubic-bezier(0.4,0,0.2,1);
+}
+
+html[data-theme="dark"] {
+  --bg: #1c1c1e;
+  --bg2: #2c2c2e;
+  --bg3: #3a3a3c;
+  --surface: rgba(44,44,46,0.84);
+  --surface-hover: rgba(58,58,60,0.92);
+  --border: rgba(255,255,255,0.1);
+  --border-hover: rgba(255,255,255,0.18);
+  --border-active: rgba(10,132,255,0.34);
+  --text: #f5f5f7;
+  --text2: #c7c7cc;
+  --text3: #8e8e93;
+  --cyan: #0a84ff;
+  --cyan2: #409cff;
+  --cyan-dim: rgba(10,132,255,0.12);
+  --green: #30d158;
+  --green-dim: rgba(48,209,88,0.12);
+  --amber: #ff9f0a;
+  --amber-dim: rgba(255,159,10,0.12);
+  --red: #ff453a;
+  --red-dim: rgba(255,69,58,0.12);
+  --purple: #bf5af2;
+  --purple-dim: rgba(191,90,242,0.12);
+  --brand: #f5f5f7;
+  --header-bg: rgba(28,28,30,0.82);
+  --scroll-thumb: rgba(255,255,255,0.14);
+  --scroll-thumb-hover: rgba(255,255,255,0.24);
+  --soft-hover: rgba(255,255,255,0.06);
+  --subtle-fill: rgba(255,255,255,0.04);
+  --track: rgba(255,255,255,0.08);
+  --dash: rgba(255,255,255,0.14);
+  --col-bg: rgba(44,44,46,0.54);
+  --modal-backdrop: rgba(0,0,0,0.45);
+  --guest-bg: rgba(10,132,255,0.1);
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.28);
+  --shadow-md: 0 8px 26px rgba(0,0,0,0.32);
+  --shadow-lg: 0 18px 52px rgba(0,0,0,0.42);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar { width:5px; height:5px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--scroll-thumb); border-radius:4px; }
+::-webkit-scrollbar-thumb:hover { background:var(--scroll-thumb-hover); }
+
+/* ── Loading ── */
+.loading-page { min-height:100vh; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:16px; }
+.loading-spinner {
+  width:36px; height:36px; border:3px solid var(--bg3); border-top-color:var(--cyan);
+  border-radius:50%; animation:spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform:rotate(360deg); } }
+.loading-text { font-size:12px; color:var(--text3); font-family:var(--mono); letter-spacing:1px; }
+.loading-bar {
+  position:fixed; top:0; left:0; height:2px; z-index:9999;
+  background:var(--cyan);
+  background-size:200% 100%; animation:loadSlide 1.2s ease infinite;
+  width:100%;
+}
+@keyframes loadSlide { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+/* Skeleton */
+.skeleton { background:linear-gradient(90deg,var(--bg3) 25%,var(--surface-hover) 50%,var(--bg3) 75%); background-size:200% 100%; animation:shimmer 1.5s infinite; border-radius:var(--radius-sm); }
+@keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+/* ── Login ── */
+.login-page { min-height:100vh; display:flex; align-items:center; justify-content:center; animation:fadeIn 0.4s ease; background:var(--bg); }
+.login-box {
+  width:400px; background:var(--surface); backdrop-filter:blur(20px);
+  border:1px solid var(--border); border-radius:var(--radius-lg); padding:48px 40px;
+  box-shadow:var(--shadow-lg);
+}
+.login-logo { text-align:center; margin-bottom:32px; }
+.login-mark {
+  width:56px; height:56px; background:var(--brand);
+  border-radius:16px; display:inline-flex; align-items:center; justify-content:center;
+  font-size:20px; font-weight:700; color:var(--bg2); font-family:var(--sans);
+  box-shadow:var(--shadow-sm);
+}
+.login-logo h2 { margin-top:16px; font-size:20px; font-weight:600; color:var(--text); letter-spacing:0; }
+.login-logo p { font-size:11px; color:var(--text3); font-family:var(--sans); margin-top:4px; letter-spacing:0; }
+
+.field { margin-bottom:16px; }
+.field label { display:block; font-size:11px; font-weight:600; color:var(--text2); letter-spacing:0; margin-bottom:6px; font-family:var(--sans); }
+.field input, .field select, .field textarea {
+  width:100%; padding:10px 14px; background:var(--bg2); border:1px solid var(--border);
+  border-radius:var(--radius-sm); color:var(--text); font-size:13px; font-family:var(--sans);
+  outline:none; transition:border-color var(--transition), box-shadow var(--transition);
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+  border-color:var(--cyan2); box-shadow:0 0 0 3px rgba(6,182,212,0.1);
+}
+.field input::placeholder { color:var(--text3); }
+.field input:disabled, .field select:disabled, .field textarea:disabled { opacity:0.5; cursor:not-allowed; }
+.field-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+
+.btn {
+  padding:8px 16px; border-radius:var(--radius-sm); border:1px solid var(--border);
+  background:var(--bg3); color:var(--text); font-size:12px; font-family:var(--sans);
+  cursor:pointer; transition:all var(--transition-fast); display:inline-flex; align-items:center; gap:5px;
+  font-weight:500; position:relative; overflow:hidden;
+}
+.btn:hover { border-color:var(--border-hover); background:var(--bg2); }
+.btn:active { transform:scale(0.97); }
+.btn:disabled { opacity:0.5; cursor:not-allowed; pointer-events:none; }
+.btn-primary { background:var(--cyan); color:#fff; border:none; font-weight:600; }
+.btn-primary:hover { background:var(--cyan2); box-shadow:var(--shadow-sm); }
+.btn-danger { background:var(--red); color:#fff; border:none; }
+.btn-danger:hover { background:var(--red); box-shadow:var(--shadow-sm); }
+.btn-sm { padding:5px 10px; font-size:11px; }
+.btn-ghost { background:transparent; border-color:transparent; color:var(--text2); }
+.btn-ghost:hover { background:var(--soft-hover); color:var(--text); }
+.btn-full { width:100%; justify-content:center; }
+.theme-btn {
+  width:28px; height:28px; padding:0; justify-content:center;
+  background:var(--surface); color:var(--text2); border-color:var(--border);
+}
+.theme-btn:hover { color:var(--cyan); background:var(--surface-hover); border-color:var(--border-hover); }
+
+/* ── Header ── */
+.header {
+  height:54px; background:var(--header-bg); backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border); padding:0 24px;
+  display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; z-index:100;
+}
+.h-left { display:flex; align-items:center; gap:12px; }
+.h-mark {
+  width:30px; height:30px; background:var(--brand);
+  border-radius:8px; display:flex; align-items:center; justify-content:center;
+  font-size:12px; font-weight:700; color:var(--bg2); font-family:var(--sans);
+}
+.h-title { font-size:14px; font-weight:600; letter-spacing:0; }
+.h-breadcrumb { font-size:12px; color:var(--text2); display:flex; align-items:center; gap:6px; }
+.h-breadcrumb a { color:var(--text2); text-decoration:none; cursor:pointer; transition:color var(--transition-fast); }
+.h-breadcrumb a:hover { color:var(--cyan); }
+.h-breadcrumb .sep { color:var(--text3); }
+.h-breadcrumb .current { color:var(--text); font-weight:500; }
+.h-right { display:flex; align-items:center; gap:8px; }
+.date-chip {
+  background:var(--cyan-dim); color:var(--cyan); padding:4px 10px; border-radius:12px;
+  font-size:10px; font-weight:500; font-family:var(--mono); border:1px solid var(--border);
+}
+.user-chip {
+  display:flex; align-items:center; gap:6px; padding:3px 10px 3px 3px;
+  background:var(--bg3); border:1px solid var(--border); border-radius:16px;
+  cursor:pointer; transition:all var(--transition-fast); font-size:12px; font-weight:500;
+  position:relative;
+}
+.user-chip:hover { border-color:var(--border-hover); background:var(--bg2); }
+.user-av {
+  width:24px; height:24px; background:var(--brand);
+  border-radius:50%; display:flex; align-items:center; justify-content:center;
+  font-size:10px; font-weight:600; color:var(--bg2);
+}
+
+/* ── User Dropdown ── */
+.user-dropdown {
+  position:absolute; top:calc(100% + 6px); right:0; min-width:180px;
+  background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius);
+  box-shadow:var(--shadow-lg); z-index:200; overflow:hidden;
+  opacity:0; pointer-events:none; transform:translateY(-4px);
+  transition:opacity 0.15s ease, transform 0.15s ease;
+}
+.user-dropdown.open { opacity:1; pointer-events:all; transform:translateY(0); }
+.user-dropdown-header {
+  padding:12px 14px; border-bottom:1px solid var(--border);
+  display:flex; align-items:center; gap:10px;
+}
+.user-dropdown-header .ud-av {
+  width:32px; height:32px; background:var(--brand);
+  border-radius:50%; display:flex; align-items:center; justify-content:center;
+  font-size:13px; font-weight:600; color:var(--bg2); flex-shrink:0;
+}
+.user-dropdown-header .ud-name { font-size:12px; font-weight:600; color:var(--text); }
+.user-dropdown-header .ud-role { font-size:10px; color:var(--text3); font-family:var(--mono); margin-top:1px; }
+.user-dropdown-item {
+  display:flex; align-items:center; gap:8px; padding:9px 14px; font-size:12px;
+  color:var(--text2); cursor:pointer; transition:background 0.1s;
+}
+.user-dropdown-item:hover { background:var(--soft-hover); color:var(--text); }
+.user-dropdown-item.danger { color:var(--red); }
+.user-dropdown-item.danger:hover { background:var(--red-dim); }
+.user-dropdown-sep { height:1px; background:var(--border); margin:0; }
+
+/* ── Guest Banner ── */
+.guest-banner {
+  background: var(--guest-bg);
+  border-bottom: 1px solid var(--border);
+  padding: 8px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-size: 12px;
+  color: var(--text2);
+}
+.guest-banner span { font-family: var(--mono); }
+.guest-banner a {
+  color: var(--cyan);
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+.guest-banner a:hover { color: var(--cyan2); text-decoration: underline; }
+
+/* ── Container ── */
+.container { max-width:1440px; margin:0 auto; padding:20px 24px; animation:fadeIn 0.3s ease; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── Big Screen ── */
+.screen {
+  min-height:calc(100vh - 74px); display:grid; grid-template-columns:minmax(0,1.2fr) minmax(320px,0.8fr);
+  gap:16px; align-items:stretch; padding:10px 0 22px;
+}
+.screen-main, .screen-side, .screen-strip {
+  background:rgba(255,255,255,0.78); border:1px solid var(--border); border-radius:var(--radius);
+  box-shadow:var(--shadow-sm); backdrop-filter:blur(18px);
+}
+html[data-theme="dark"] .screen-main,
+html[data-theme="dark"] .screen-side,
+html[data-theme="dark"] .screen-strip { background:var(--surface); }
+.screen-main { padding:28px; display:flex; flex-direction:column; justify-content:space-between; min-height:440px; }
+.screen-kicker { font-size:12px; color:var(--text3); font-family:var(--sans); margin-bottom:8px; }
+.screen-title { font-size:44px; line-height:1.08; font-weight:700; letter-spacing:0; color:var(--text); max-width:760px; }
+.screen-sub { color:var(--text2); font-size:14px; margin-top:12px; max-width:680px; }
+.screen-metrics { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:28px; }
+.screen-metric { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:14px; }
+.screen-metric .num { font-size:28px; font-weight:700; font-family:var(--mono); color:var(--text); }
+.screen-metric .label { color:var(--text3); font-size:11px; margin-top:2px; }
+.screen-progress { margin-top:24px; }
+.screen-progress-row { display:flex; justify-content:space-between; color:var(--text2); font-size:12px; margin-bottom:8px; }
+.screen-progress-track { height:8px; background:var(--track); border-radius:99px; overflow:hidden; }
+.screen-progress-fill { height:100%; background:var(--green); border-radius:99px; }
+.screen-actions { display:flex; gap:8px; margin-top:24px; flex-wrap:wrap; }
+.screen-side { padding:18px; min-height:440px; display:flex; flex-direction:column; }
+.screen-side-title { font-size:13px; font-weight:700; margin-bottom:12px; }
+.focus-list { display:flex; flex-direction:column; gap:8px; overflow:auto; }
+.focus-item { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:12px; cursor:pointer; transition:all var(--transition-fast); }
+.focus-item:hover { border-color:var(--border-hover); transform:translateY(-1px); }
+.focus-top { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:5px; }
+.focus-name { font-size:12px; font-weight:700; display:flex; align-items:center; gap:6px; min-width:0; }
+.focus-meta { color:var(--text3); font-size:11px; font-family:var(--sans); }
+.screen-strip { grid-column:1 / -1; padding:12px 14px; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.strip-items { display:flex; gap:8px; overflow:auto; }
+.strip-pill { flex:0 0 auto; border:1px solid var(--border); border-radius:999px; padding:6px 10px; font-size:11px; color:var(--text2); background:var(--bg2); }
+.management-section { scroll-margin-top:70px; }
+
+/* ── Alert ── */
+.alert {
+  background:var(--red-dim); border:1px solid var(--red-dim);
+  border-radius:var(--radius); padding:14px 18px; margin-bottom:20px;
+  display:flex; align-items:flex-start; gap:12px;
+  animation:slideDown 0.3s ease;
+}
+@keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+.alert-icon { font-size:16px; flex-shrink:0; margin-top:1px; }
+.alert-title { font-size:13px; font-weight:600; color:var(--red); }
+.alert-desc { font-size:11px; color:var(--text2); margin-top:2px; }
+.alert-chips { display:flex; flex-wrap:wrap; gap:5px; margin-top:8px; }
+.alert-chip {
+  background:var(--red-dim); border:1px solid var(--red-dim);
+  color:var(--red); padding:3px 8px; border-radius:4px; font-size:10px; font-weight:500;
+  cursor:pointer; font-family:var(--mono); transition:all var(--transition-fast);
+}
+.alert-chip:hover { background:var(--red); color:#fff; transform:translateY(-1px); }
+
+/* ── Stats ── */
+.stats { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:20px; }
+.stat {
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+  padding:16px; position:relative; overflow:hidden; transition:all var(--transition);
+}
+.stat:hover { border-color:var(--border-hover); transform:translateY(-1px); box-shadow:var(--shadow-sm); }
+.stat::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:var(--border); }
+.stat-label { font-size:11px; font-weight:600; color:var(--text3); letter-spacing:0; font-family:var(--sans); margin-bottom:8px; }
+.stat-val { font-size:28px; font-weight:700; font-family:var(--sans); letter-spacing:0; }
+.stat-sub { font-size:11px; color:var(--text3); margin-top:4px; font-family:var(--sans); }
+.stat.cyan .stat-val { color:var(--cyan); }
+.stat.cyan::before { background:var(--border); }
+.stat.green .stat-val { color:var(--green); }
+.stat.green::before { background:var(--border); }
+.stat.amber .stat-val { color:var(--amber); }
+.stat.amber::before { background:var(--border); }
+.stat.red .stat-val { color:var(--red); }
+.stat.red::before { background:var(--border); }
+
+/* ── Section ── */
+.sec-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+.sec-title { font-size:13px; font-weight:600; display:flex; align-items:center; gap:6px; }
+.sec-dot { width:5px; height:5px; border-radius:50%; background:var(--cyan); }
+
+/* ── Project Cards ── */
+.proj-grid-wrap { position:relative; margin-bottom:24px; }
+.proj-grid-wrap::before, .proj-grid-wrap::after {
+  content:''; position:absolute; top:0; bottom:0; width:28px; z-index:2; pointer-events:none;
+  transition:opacity 0.2s;
+}
+.proj-grid-wrap::before { left:0; background:linear-gradient(90deg, var(--bg), transparent); }
+.proj-grid-wrap::after { right:0; background:linear-gradient(270deg, var(--bg), transparent); }
+.proj-scroll-btn {
+  position:absolute; top:50%; transform:translateY(-50%); z-index:3;
+  width:28px; height:28px; border-radius:50%; border:1px solid var(--border);
+  background:var(--bg2); color:var(--text2); cursor:pointer;
+  display:flex; align-items:center; justify-content:center; font-size:11px;
+  transition:all var(--transition-fast); box-shadow:var(--shadow-sm);
+}
+.proj-scroll-btn:hover { border-color:var(--cyan); color:var(--cyan); background:var(--bg3); }
+.proj-scroll-btn.left { left:-6px; }
+.proj-scroll-btn.right { right:-6px; }
+.proj-grid {
+  display:flex; gap:10px; overflow-x:auto; padding:4px 2px 8px;
+  scroll-behavior:smooth; -webkit-overflow-scrolling:touch;
+  scrollbar-width:thin; scrollbar-color:var(--scroll-thumb) transparent;
+}
+.proj-grid::-webkit-scrollbar { height:4px; }
+.proj-grid::-webkit-scrollbar-track { background:transparent; }
+.proj-grid::-webkit-scrollbar-thumb { background:var(--scroll-thumb); border-radius:4px; }
+.proj-card {
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+  padding:18px; cursor:pointer; transition:all var(--transition); position:relative; overflow:hidden;
+  flex-shrink:0; width:260px;
+}
+.proj-card:hover { border-color:var(--border-hover); transform:translateY(-2px); box-shadow:var(--shadow-md); }
+.proj-card:active { transform:translateY(0); }
+.proj-card.completed { opacity:0.55; }
+.proj-card.completed:hover { opacity:0.8; }
+.proj-card.completed .proj-name::after { content:' ✓'; color:var(--green); font-size:11px; }
+.proj-card.active { border-color:var(--border-active); box-shadow:0 0 0 1px var(--border-active); }
+.proj-top { position:absolute; top:0; left:0; right:0; height:1px; opacity:0.7; }
+.project-badge {
+  width:22px; height:22px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center;
+  flex:0 0 auto; font-size:12px; font-weight:700; line-height:1; border:1px solid rgba(0,0,0,0.05);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,0.24);
+}
+.project-badge.large { width:40px; height:40px; font-size:17px; margin-bottom:10px; }
+.project-badge.inline { width:18px; height:18px; font-size:10px; }
+.proj-icon { transition:transform var(--transition); }
+.proj-card:hover .proj-icon { transform:scale(1.05); }
+.proj-name { font-size:13px; font-weight:600; margin-bottom:2px; letter-spacing:0; }
+.proj-desc { font-size:11px; color:var(--text3); margin-bottom:12px; line-height:1.5; }
+.proj-bar { display:flex; align-items:center; gap:8px; }
+.proj-track { flex:1; height:4px; background:var(--track); border-radius:3px; overflow:hidden; }
+.proj-fill { height:100%; border-radius:3px; transition:width 0.6s cubic-bezier(0.4,0,0.2,1); }
+.proj-pct { font-size:11px; font-weight:600; font-family:var(--sans); min-width:36px; text-align:right; }
+.proj-chips { display:flex; gap:4px; margin-top:8px; flex-wrap:wrap; }
+.pchip { padding:2px 7px; border-radius:999px; font-size:10px; font-weight:600; font-family:var(--sans); }
+.proj-meta { display:flex; flex-wrap:wrap; gap:4px; margin:6px 0 8px; }
+.proj-meta .pchip { font-size:10px; }
+.proj-card.archived { opacity:0.72; }
+.proj-card.archived:hover { opacity:0.92; }
+.proj-card.editable { cursor:context-menu; }
+.proj-end { font-size:10px; color:var(--text3); font-family:var(--sans); margin-top:8px; }
+
+/* ── Kanban ── */
+.board-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+.month-nav { display:flex; align-items:center; gap:4px; }
+.month-btn {
+  width:28px; height:28px; background:var(--bg3); border:1px solid var(--border);
+  border-radius:var(--radius-sm); color:var(--text2); cursor:pointer;
+  display:flex; align-items:center; justify-content:center; font-size:11px;
+  transition:all var(--transition-fast);
+}
+.month-btn:hover { border-color:var(--border-hover); color:var(--text); background:var(--surface-hover); }
+.month-label {
+  font-size:15px; font-weight:700; font-family:var(--sans); min-width:110px; text-align:center;
+  color:var(--text);
+}
+.view-tabs { display:flex; align-items:center; gap:4px; }
+.view-tab {
+  height:28px; padding:0 10px; background:var(--surface); border:1px solid var(--border);
+  border-radius:var(--radius-sm); color:var(--text2); cursor:pointer; font-size:11px;
+  transition:all var(--transition-fast);
+}
+.view-tab:hover { border-color:var(--border-hover); color:var(--text); background:var(--surface-hover); }
+.view-tab.active { background:var(--cyan-dim); border-color:var(--border-hover); color:var(--cyan); font-weight:600; }
+.year-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:14px; }
+.year-card {
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+  padding:12px; cursor:pointer; transition:all var(--transition-fast); min-height:92px;
+}
+.year-card:hover { transform:translateY(-1px); border-color:var(--border-hover); box-shadow:var(--shadow-sm); }
+.year-card.active { border-color:var(--border-active); box-shadow:0 0 0 1px var(--border-active); }
+.year-card-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+.year-card-title { font-size:12px; font-weight:700; color:var(--text); }
+.year-card-count { font-size:11px; font-family:var(--sans); color:var(--cyan); font-weight:700; }
+.year-card-track { height:4px; background:var(--track); border-radius:3px; overflow:hidden; margin-bottom:8px; }
+.year-card-fill { height:100%; background:var(--green); border-radius:3px; }
+.year-card-meta { display:flex; flex-wrap:wrap; gap:4px; }
+.year-pill { font-size:10px; font-family:var(--sans); padding:2px 7px; border-radius:999px; background:var(--bg3); color:var(--text2); }
+.year-sections { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+.year-section {
+  background:var(--col-bg); border:1px solid var(--border); border-radius:var(--radius);
+  padding:12px; min-height:90px;
+}
+.year-section-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; padding-bottom:8px; border-bottom:1px solid var(--border); }
+.year-section-title { font-size:12px; font-weight:700; }
+.year-section-count { font-size:11px; font-family:var(--sans); color:var(--text3); }
+.year-task-list { display:flex; flex-direction:column; gap:6px; }
+
+.kanban { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; align-items:start; }
+.col {
+  background:var(--col-bg); border:1px solid var(--border);
+  border-radius:var(--radius); padding:12px; min-height:180px;
+  transition:border-color var(--transition), background var(--transition);
+}
+.col.drag-over { border-color:var(--border-active); background:var(--cyan-dim); }
+.col-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; padding-bottom:8px; border-bottom:1px solid var(--border); }
+.col-label { display:flex; align-items:center; gap:6px; font-size:11px; font-weight:600; }
+.col-dot { width:7px; height:7px; border-radius:50%; }
+.col-count { font-size:10px; font-weight:600; padding:2px 8px; border-radius:999px; font-family:var(--sans); }
+.task-list { display:flex; flex-direction:column; gap:6px; min-height:40px; }
+
+/* Task Card */
+.tcard {
+  background:var(--surface); border:1px solid var(--border); border-radius:8px;
+  padding:12px; cursor:grab; transition:all var(--transition-fast); position:relative;
+  user-select:none;
+}
+.tcard:hover { border-color:var(--border-hover); box-shadow:var(--shadow-sm); }
+.tcard:active { cursor:grabbing; }
+.tcard.overdue { border-left:3px solid var(--red); }
+.tcard.warn { border-left:3px solid var(--amber); }
+.tcard.extended { border-left:3px solid var(--purple); }
+.tcard.dragging { opacity:0.35; transform:rotate(2deg) scale(0.97); }
+.tcard-title { font-size:12px; font-weight:500; margin-bottom:4px; line-height:1.45; letter-spacing:0; }
+.tcard-proj { font-size:10px; font-weight:600; padding:2px 7px 2px 3px; border-radius:999px; display:inline-flex; align-items:center; gap:4px; margin-bottom:6px; font-family:var(--sans); }
+.tcard-desc { font-size:10px; color:var(--text3); margin-bottom:4px; line-height:1.4; }
+.tcard-footer { display:flex; align-items:center; justify-content:space-between; margin-top:8px; }
+.tcard-dl { font-size:10px; color:var(--text3); font-family:var(--sans); display:flex; align-items:center; gap:3px; }
+.tcard-dl.overdue { color:var(--red); font-weight:600; }
+.tcard-dl.warn { color:var(--amber); }
+.tcard-badges { display:flex; align-items:center; gap:4px; }
+.overdue-tag { background:var(--red-dim); color:var(--red); font-size:9px; font-weight:600; padding:2px 6px; border-radius:999px; font-family:var(--sans); }
+.extended-tag { background:var(--purple-dim); color:var(--purple); font-size:9px; font-weight:600; padding:2px 6px; border-radius:999px; font-family:var(--sans); }
+.prio-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+.tcard-assignee { font-size:10px; color:var(--text3); font-family:var(--sans); margin-top:4px; }
+.reschedule-btn {
+  margin-top:8px; background:var(--red-dim); color:var(--red);
+  border:1px solid var(--red-dim); border-radius:4px;
+  padding:4px 10px; font-size:10px; font-weight:600; cursor:pointer; font-family:var(--sans);
+  transition:all var(--transition-fast);
+}
+.reschedule-btn:hover { background:var(--red); color:#fff; transform:translateY(-1px); }
+
+/* Drop indicator line */
+.drop-indicator { height:3px; background:var(--cyan); border-radius:2px; margin:-2px 0; transition:opacity 0.15s; pointer-events:none; }
+
+.add-btn {
+  width:100%; padding:7px; border:1px dashed var(--dash); border-radius:var(--radius-sm);
+  background:transparent; color:var(--text3); font-size:10px; cursor:pointer;
+  transition:all var(--transition-fast); margin-top:8px; font-family:var(--sans);
+}
+.add-btn:hover { border-color:var(--border-hover); color:var(--text); background:var(--surface-hover); }
+.empty-col { padding:24px 8px; text-align:center; color:var(--text3); font-size:11px; font-family:var(--sans); }
+
+/* ── Modal ── */
+.modal-bg {
+  position:fixed; inset:0; background:var(--modal-backdrop); backdrop-filter:blur(4px);
+  display:flex; align-items:center; justify-content:center; z-index:1000;
+  opacity:0; pointer-events:none; transition:opacity 0.2s ease;
+}
+.modal-bg.open { opacity:1; pointer-events:all; }
+.modal-box {
+  background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius-lg);
+  padding:28px; width:500px; max-width:92vw; max-height:88vh; overflow-y:auto;
+  transform:scale(0.95) translateY(10px); transition:transform 0.25s cubic-bezier(0.4,0,0.2,1);
+  box-shadow:var(--shadow-lg);
+}
+.modal-bg.open .modal-box { transform:scale(1) translateY(0); }
+.modal-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; }
+.modal-title { font-size:16px; font-weight:700; letter-spacing:0; }
+.modal-x { cursor:pointer; font-size:18px; color:var(--text3); background:none; border:none; line-height:1; transition:color var(--transition-fast); padding:4px; }
+.modal-x:hover { color:var(--text); }
+.modal-foot { display:flex; gap:8px; justify-content:flex-end; margin-top:24px; padding-top:16px; border-top:1px solid var(--border); }
+
+.warn-box { background:var(--red-dim); border:1px solid var(--red-dim); border-radius:var(--radius-sm); padding:12px; margin-bottom:14px; }
+.warn-box h4 { font-size:11px; color:var(--red); font-weight:600; margin-bottom:3px; }
+.warn-box p { font-size:10px; color:var(--red); line-height:1.4; }
+
+/* ── User list ── */
+.user-list { border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; }
+.user-row { display:flex; align-items:center; justify-content:space-between; padding:12px 16px; border-bottom:1px solid var(--border); transition:background var(--transition-fast); }
+.user-row:last-child { border-bottom:none; }
+.user-row:hover { background:var(--subtle-fill); }
+.user-info { display:flex; align-items:center; gap:10px; }
+.user-info-av {
+  width:32px; height:32px; background:var(--brand);
+  border-radius:50%; display:flex; align-items:center; justify-content:center;
+  font-size:12px; font-weight:600; color:#fff; flex-shrink:0;
+}
+.user-info-name { font-size:12px; font-weight:500; }
+.role-tag { font-size:9px; font-weight:600; padding:2px 8px; border-radius:8px; font-family:var(--mono); }
+.role-admin { background:var(--cyan-dim); color:var(--cyan); }
+.role-member { background:var(--purple-dim); color:var(--purple); }
+.user-actions { display:flex; gap:4px; }
+
+/* ── Toast ── */
+.toast-box { position:fixed; bottom:20px; right:20px; z-index:2000; display:flex; flex-direction:column; gap:6px; pointer-events:none; }
+.toast {
+  background:var(--bg2); border:1px solid var(--border); color:var(--text);
+  padding:10px 16px; border-radius:8px; font-size:12px; box-shadow:var(--shadow-md);
+  transform:translateX(120%); transition:transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  max-width:280px; pointer-events:all; font-family:var(--sans); font-weight:500;
+  display:flex; align-items:center; gap:8px;
+}
+.toast.show { transform:translateX(0); }
+.toast.success { border-color:rgba(52,211,153,0.25); }
+.toast.success::before { content:''; width:4px; height:16px; background:var(--green); border-radius:2px; flex-shrink:0; }
+.toast.error { border-color:var(--red-dim); }
+.toast.error::before { content:''; width:4px; height:16px; background:var(--red); border-radius:2px; flex-shrink:0; }
+.toast.warn { border-color:rgba(251,191,36,0.25); }
+.toast.warn::before { content:''; width:4px; height:16px; background:var(--amber); border-radius:2px; flex-shrink:0; }
+
+/* ── Back button ── */
+.back-btn {
+  display:inline-flex; align-items:center; gap:4px; padding:5px 12px;
+  border-radius:var(--radius-sm); border:1px solid var(--border); background:transparent;
+  color:var(--text2); font-size:11px; cursor:pointer; transition:all var(--transition-fast); font-family:var(--sans);
+}
+.back-btn:hover { border-color:var(--border-hover); color:var(--text); background:var(--subtle-fill); }
+.carryover-note {
+  margin:-2px 0 10px; padding:8px 10px; border:1px solid var(--amber-dim); border-radius:var(--radius);
+  background:var(--amber-dim); color:var(--text2); font-size:11px;
+}
+
+/* ── Responsive ── */
+@media (max-width:1200px) {
+  .screen { grid-template-columns:1fr; }
+  .screen-side { min-height:auto; }
+  .kanban { grid-template-columns:repeat(2,1fr); }
+  .stats { grid-template-columns:repeat(2,1fr); }
+  .year-grid { grid-template-columns:repeat(3,1fr); }
+}
+@media (max-width:768px) {
+  .container { padding:12px; }
+  .screen { min-height:auto; padding-top:4px; }
+  .screen-main { padding:20px; min-height:auto; }
+  .screen-title { font-size:30px; }
+  .screen-metrics { grid-template-columns:1fr 1fr; }
+  .screen-strip { display:block; }
+  .strip-items { margin-top:10px; }
+  .header { padding:0 12px; height:48px; }
+  .kanban { grid-template-columns:1fr; }
+  .year-grid, .year-sections { grid-template-columns:1fr; }
+  .stats { grid-template-columns:1fr 1fr; }
+  .proj-card { width:220px; }
+  .field-row { grid-template-columns:1fr; }
+  .h-title { display:none; }
+  .date-chip { display:none; }
+  .modal-box { padding:20px; }
+  .login-box { padding:32px 24px; margin:0 16px; }
+}
+@media (max-width:480px) {
+  .stats { grid-template-columns:1fr; }
+  .h-right .btn-sm { display:none; }
+}
+</style>
+</head>
+<body>
+<div id="app"><div class="loading-page"><div class="loading-spinner"></div><div class="loading-text">LOADING...</div></div></div>
+<div class="toast-box" id="toastBox"></div>
+
+<script>
+// ══════════════════════════════════════
+//  Utilities
+// ══════════════════════════════════════
+function esc(str) {
+  if (str == null) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+function debounce(fn, ms) {
+  let t; return function(...a) { clearTimeout(t); t = setTimeout(() => fn.apply(this, a), ms); };
+}
+
+// ══════════════════════════════════════
+//  API
+// ══════════════════════════════════════
+let TOKEN = localStorage.getItem('kanban_token') || '';
+let THEME = localStorage.getItem('kanban_theme') || 'light';
+
+function applyTheme() {
+  document.documentElement.dataset.theme = THEME;
+}
+
+function toggleTheme() {
+  THEME = THEME === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('kanban_theme', THEME);
+  applyTheme();
+  document.querySelectorAll('.theme-btn').forEach(btn => { btn.textContent = themeIcon(); });
+}
+
+function themeIcon() {
+  return THEME === 'dark' ? '☾' : '☀';
+}
+
+function renderThemeButton() {
+  return `<button class="btn btn-sm theme-btn" onclick="toggleTheme()" title="切换主题">${themeIcon()}</button>`;
+}
+
+applyTheme();
+
+function decodeJwtPayload(token) {
+  const raw = token.split('.')[1] || '';
+  const padded = raw.replace(/-/g, '+').replace(/_/g, '/') + '='.repeat((4 - raw.length % 4) % 4);
+  return JSON.parse(atob(padded));
+}
+
+async function api(path, opts = {}) {
+  const headers = { 'Content-Type': 'application/json' };
+  if (TOKEN) headers['Authorization'] = 'Bearer ' + TOKEN;
+  try {
+    const res = await fetch(path, { ...opts, headers });
+    if (res.status === 401) { logout(); throw new Error('未登录'); }
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || '请求失败');
+    return data;
+  } catch (e) {
+    if (e.name === 'TypeError' && e.message.includes('fetch')) {
+      throw new Error('网络连接失败');
+    }
+    throw e;
+  }
+}
+const GET = p => api(p);
+const POST = (p, d) => api(p, { method:'POST', body:JSON.stringify(d) });
+const PUT = (p, d) => api(p, { method:'PUT', body:JSON.stringify(d) });
+const DEL = p => api(p, { method:'DELETE' });
+
+// ══════════════════════════════════════
+//  State
+// ══════════════════════════════════════
+let currentUser = null;
+let projects = [];
+let tasks = [];
+let users = [];
+let stats = {};
+let viewMonth = new Date().getMonth();
+let viewYear = new Date().getFullYear();
+let viewMode = 'month';
+let selectedProjectId = null;
+let isLoading = false;
+let searchQuery = '';
+let filterStatus = '';
+let filterPriority = '';
+let filterAssignee = '';
+let projectMembers = [];
+let isSaving = false;
+
+const STATUS = {
+  todo:   { label:'待启动', dot:'#8e8e93', bg:'rgba(142,142,147,0.06)', cntBg:'rgba(142,142,147,0.12)', cntTxt:'#6e6e73' },
+  doing:  { label:'进行中', dot:'#007aff', bg:'rgba(0,122,255,0.05)',  cntBg:'rgba(0,122,255,0.1)',  cntTxt:'#007aff' },
+  verify: { label:'验证中', dot:'#ff9500', bg:'rgba(255,149,0,0.06)',  cntBg:'rgba(255,149,0,0.11)',  cntTxt:'#ff9500' },
+  done:   { label:'已完成', dot:'#34c759', bg:'rgba(52,199,89,0.06)',  cntBg:'rgba(52,199,89,0.11)',  cntTxt:'#34c759' },
+};
+const PRIO = { low:'#34c759', medium:'#ff9500', high:'#ff3b30' };
+const PRIO_LABEL = { low:'低', medium:'中', high:'高' };
+const PRIO_ORDER = { high:0, medium:1, low:2 };
+const CFILL = { cyan:'#007aff', green:'#34c759', amber:'#ff9500', red:'#ff3b30', purple:'#af52de', teal:'#5ac8fa' };
+const CBG = { cyan:'rgba(0,122,255,0.08)', green:'rgba(52,199,89,0.09)', amber:'rgba(255,149,0,0.09)', red:'rgba(255,59,48,0.08)', purple:'rgba(175,82,222,0.08)', teal:'rgba(90,200,250,0.09)' };
+const APP_CONFIG = {
+  ownerName: '项目负责人',
+  boardName: '工作看板',
+  shortName: 'KB',
+  loginSubtitle: 'KANBAN BOARD',
+  exportTitle: '项目工作看板任务导出',
+  filePrefix: 'kanban'
+};
+
+APP_CONFIG.appName = `${APP_CONFIG.ownerName}${APP_CONFIG.boardName}`;
+APP_CONFIG.loginTitle = APP_CONFIG.boardName;
+
+const BOARD_CONFIG = {
+  title: '项目节奏清晰，重点工作持续向前推进。',
+  subtitle: '聚焦本阶段正在推进的交付、联调和优化事项；已完成项目保留入口，便于后续复盘或再次改造。',
+  label: 'MOM 项目总览'
+};
+
+document.title = APP_CONFIG.appName;
+
+// ══════════════════════════════════════
+//  Drag & Drop State
+// ══════════════════════════════════════
+let dragTaskId = null;
+let dragSourceStatus = null;
+
+// ══════════════════════════════════════
+//  Helpers
+// ══════════════════════════════════════
+function today() { return new Date().toISOString().slice(0,10); }
+function fmt(s) { if(!s) return ''; const d=new Date(s+'T00:00:00'); return `${d.getMonth()+1}/${d.getDate()}`; }
+function fmtFull(s) { if(!s) return ''; const d=new Date(s+'T00:00:00'); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+function isOverdue(t) { return t.status!=='done' && t.deadline && t.deadline < today(); }
+function daysOverdue(t) { return Math.round((new Date(today()+'T00:00:00')-new Date(t.deadline+'T00:00:00'))/86400000); }
+function isWarn(t) { if(t.status==='done'||!t.deadline) return false; const d=(new Date(t.deadline+'T00:00:00')-new Date(today()+'T00:00:00'))/86400000; return d>=0&&d<=3; }
+function projById(id) { return projects.find(p=>p.id===id)||{}; }
+function projectBadge(project, size = '') {
+  const c = project.color || 'cyan';
+  const cls = ['project-badge', size].filter(Boolean).join(' ');
+  return `<span class="${cls}" style="background:${CBG[c]||'var(--cyan-dim)'};color:${CFILL[c]||'var(--cyan)'}">${esc(project.icon || (project.name || '?').slice(0,1))}</span>`;
+}
+const MONTHS = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+
+function taskDate(t) {
+  return t.deadline || t.start_date || '';
+}
+
+function isCarryOverVerify(t) {
+  return t.status === 'verify' && isOverdue(t);
+}
+
+function taskInMonth(t, year, month, includeCarryOver = false) {
+  const ds = taskDate(t);
+  if (!ds) return false;
+  const d = new Date(ds + 'T00:00:00');
+  if (d.getFullYear() === year && d.getMonth() === month) return true;
+  return includeCarryOver && isCarryOverVerify(t) && t.deadline && (d.getFullYear() < year || (d.getFullYear() === year && d.getMonth() < month));
+}
+
+function taskInYear(t, year) {
+  const ds = taskDate(t);
+  if (!ds) return false;
+  return new Date(ds + 'T00:00:00').getFullYear() === year;
+}
+
+function taskMatchesFilters(t, projectId) {
+  if (projectId && t.project_id !== projectId) return false;
+  const q = searchQuery.toLowerCase();
+  if (q && !String(t.title || '').toLowerCase().includes(q) && !String(t.description || '').toLowerCase().includes(q)) return false;
+  if (filterStatus && t.status !== filterStatus) return false;
+  if (filterPriority && t.priority !== filterPriority) return false;
+  if (filterAssignee && String(t.assigned_to||'') !== filterAssignee) return false;
+  return true;
+}
+
+function visibleTasks(projectId, mode = viewMode) {
+  return tasks.filter(t => {
+    if (!taskMatchesFilters(t, projectId)) return false;
+    if (mode === 'year') return taskInYear(t, viewYear);
+    return taskInMonth(t, viewYear, viewMonth, true);
+  });
+}
+
+function monthTasks(projectId, month) {
+  return tasks.filter(t => taskMatchesFilters(t, projectId) && taskInMonth(t, viewYear, month, false));
+}
+
+function sortTasks(list) {
+  return [...list].sort((a, b) => {
+    const ad = taskDate(a) || '9999-12-31';
+    const bd = taskDate(b) || '9999-12-31';
+    if (ad !== bd) return ad.localeCompare(bd);
+    return (PRIO_ORDER[a.priority] ?? 9) - (PRIO_ORDER[b.priority] ?? 9);
+  });
+}
+
+function calcPriority(index, total) {
+  if (total <= 1) return 'high';
+  if (index === 0) return 'high';
+  const ratio = index / (total - 1);
+  if (ratio < 0.33) return 'high';
+  if (ratio < 0.66) return 'medium';
+  return 'low';
+}
+
+async function loadProjectMembers(projectId) {
+  try {
+    projectMembers = await GET(`/api/projects/${projectId}/members`);
+    if (!Array.isArray(projectMembers)) projectMembers = [];
+  } catch(_) { projectMembers = []; }
+}
+
+async function onProjectSelectChange() {
+  const pid = document.getElementById('fProject').value;
+  await loadProjectMembers(pid);
+  const sel = document.getElementById('fAssignee');
+  if (sel) {
+    sel.innerHTML = '<option value="">未指派</option>' + projectMembers.map(m =>
+      `<option value="${m.id}" ${editingTaskId && tasks.find(t=>t.id===editingTaskId)?.assigned_to==m.id?'selected':''}>${esc(m.display_name)}</option>`
+    ).join('');
+  }
+}
+
+const debouncedSearch = debounce(function(v) {
+  searchQuery = v.toLowerCase();
+  render();
+}, 200);
+
+function setFilter(key, value) {
+  if (key === 'status') filterStatus = value;
+  else if (key === 'priority') filterPriority = value;
+  else if (key === 'assignee') filterAssignee = value;
+  render();
+}
+
+// ══════════════════════════════════════
+//  Toast
+// ══════════════════════════════════════
+function toast(msg, type='success') {
+  const box = document.getElementById('toastBox');
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  el.textContent = msg;
+  box.appendChild(el);
+  requestAnimationFrame(() => el.classList.add('show'));
+  setTimeout(() => { el.classList.remove('show'); setTimeout(()=>el.remove(),350); }, 2800);
+}
+
+// ══════════════════════════════════════
+//  Auth
+// ══════════════════════════════════════
+function isGuest() { return currentUser && currentUser.role === 'guest'; }
+
+async function loginAsGuest() {
+  try {
+    const res = await POST('/api/auth/guest', {});
+    TOKEN = res.token;
+    localStorage.setItem('kanban_token', TOKEN);
+    currentUser = res.user;
+    await loadAll();
+    render();
+    toast('游客模式：仅可查看所有项目进度', 'warn');
+  } catch(e) { toast(e.message, 'error'); }
+}
+
+function logout() {
+  TOKEN = ''; currentUser = null;
+  localStorage.removeItem('kanban_token');
+  selectedProjectId = null;
+  render();
+}
+
+// ─── User Dropdown Menu ───
+function toggleUserMenu(e) {
+  e.stopPropagation();
+  const dd = document.getElementById('userDropdown');
+  if (!dd) return;
+  dd.classList.toggle('open');
+  // Bind click-outside to close
+  if (dd.classList.contains('open')) {
+    setTimeout(() => {
+      document.addEventListener('click', closeUserMenu, { once: true });
+    }, 0);
+  }
+}
+
+function closeUserMenu() {
+  const dd = document.getElementById('userDropdown');
+  if (dd) dd.classList.remove('open');
+}
+
+function confirmLogout() {
+  const dd = document.getElementById('userDropdown');
+  if (dd) dd.classList.remove('open');
+  if (confirm('确认退出登录？')) {
+    logout();
+  }
+}
+
+async function handleLogin(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('button[type="submit"]');
+  const u = document.getElementById('loginUser').value.trim();
+  const p = document.getElementById('loginPass').value;
+  if(!u||!p) { toast('请输入用户名和密码','error'); return; }
+  if (btn) { btn.disabled = true; btn.textContent = '登录中...'; }
+  try {
+    const res = await POST('/api/auth/login', { username:u, password:p });
+    TOKEN = res.token;
+    localStorage.setItem('kanban_token', TOKEN);
+    currentUser = res.user;
+    await loadAll();
+    render();
+  } catch(e) { toast(e.message,'error'); }
+  finally { if (btn) { btn.disabled = false; btn.textContent = '登 录'; } }
+}
+
+// ══════════════════════════════════════
+//  Data
+// ══════════════════════════════════════
+async function loadAll() {
+  isLoading = true;
+  if (currentUser) render();
+  try {
+    const [p, t, s] = await Promise.all([GET('/api/projects'), GET('/api/tasks'), GET('/api/stats')]);
+    projects = p; tasks = t; stats = s;
+    if (currentUser && currentUser.role === 'admin') {
+      try { users = await GET('/api/auth/users'); if(!Array.isArray(users)) users=[]; } catch(_) { users = []; }
+    }
+  } catch(e) { console.error('加载数据失败:', e); toast('数据加载失败','error'); }
+  finally { isLoading = false; }
+}
+
+// ══════════════════════════════════════
+//  Render
+// ══════════════════════════════════════
+function render() {
+  const app = document.getElementById('app');
+  if (!TOKEN || !currentUser) { app.innerHTML = renderLogin(); return; }
+  const loadingBar = isLoading ? '<div class="loading-bar"></div>' : '';
+  if (selectedProjectId) { app.innerHTML = loadingBar + renderProjectDetail(); }
+  else { app.innerHTML = loadingBar + renderDashboard(); }
+  updateScrollButtons();
+}
+
+function updateScrollButtons() {
+  const grid = document.querySelector('.proj-grid');
+  const leftBtn = document.querySelector('.proj-scroll-btn.left');
+  const rightBtn = document.querySelector('.proj-scroll-btn.right');
+  if (!grid || !leftBtn || !rightBtn) return;
+  const hasOverflow = grid.scrollWidth > grid.clientWidth;
+  if (!hasOverflow) { leftBtn.style.display = 'none'; rightBtn.style.display = 'none'; return; }
+  leftBtn.style.display = grid.scrollLeft > 5 ? 'flex' : 'none';
+  rightBtn.style.display = grid.scrollLeft < grid.scrollWidth - grid.clientWidth - 5 ? 'flex' : 'none';
+  // Attach scroll listener for dynamic updates
+  grid.onscroll = updateScrollButtons;
+}
+
+function renderLogin() {
+  return `
+  <div class="login-page">
+    <div class="login-box">
+      <div class="login-logo">
+        <div class="login-mark">${esc(APP_CONFIG.shortName)}</div>
+        <h2>${esc(APP_CONFIG.loginTitle)}</h2>
+        <p>${esc(APP_CONFIG.loginSubtitle)}</p>
+      </div>
+      <form onsubmit="handleLogin(event)">
+        <div class="field"><label>用户名</label><input type="text" id="loginUser" placeholder="输入用户名" autocomplete="username" autofocus></div>
+        <div class="field"><label>密码</label><input type="password" id="loginPass" placeholder="输入密码" autocomplete="current-password"></div>
+        <button type="submit" class="btn btn-primary btn-full" style="margin-top:8px;padding:11px;">登 录</button>
+      </form>
+      <button class="btn btn-ghost btn-full" onclick="loginAsGuest()" style="margin-top:12px;padding:11px;border:1px solid var(--border);">
+        👁 游客访问（仅查看）
+      </button>
+      <p style="text-align:center;font-size:11px;color:var(--text3);margin-top:20px;">Cloudflare 版本</p>
+    </div>
+  </div>`;
+}
+
+function renderDashboard() {
+  const now = new Date();
+  const days = ['日','一','二','三','四','五','六'];
+  const dateStr = `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')} 周${days[now.getDay()]}`;
+
+  return `
+  <header class="header">
+    <div class="h-left">
+      <div class="h-mark">${esc(APP_CONFIG.shortName)}</div>
+      <div class="h-title">${esc(APP_CONFIG.appName)}</div>
+    </div>
+    <div class="h-right">
+      <div class="date-chip">${esc(dateStr)}</div>
+      ${renderThemeButton()}
+      ${currentUser.role==='admin'?`<button class="btn btn-sm" onclick="openUserModal()">用户管理</button>`:''}
+      ${currentUser.role==='admin'?`<button class="btn btn-sm btn-primary" onclick="openProjectModal()">+ 项目</button>`:''}
+      <div class="user-chip" onclick="toggleUserMenu(event)">
+        <div class="user-av">${esc(currentUser.avatar||currentUser.display_name.charAt(0))}</div>
+        <span>${esc(currentUser.display_name)}</span>
+        <div class="user-dropdown" id="userDropdown">
+          <div class="user-dropdown-header">
+            <div class="ud-av">${esc(currentUser.avatar||currentUser.display_name.charAt(0))}</div>
+            <div><div class="ud-name">${esc(currentUser.display_name)}</div><div class="ud-role">${currentUser.role==='admin'?'管理员':currentUser.role==='guest'?'游客':'成员'} · @${esc(currentUser.username)}</div></div>
+          </div>
+          <div class="user-dropdown-item danger" onclick="confirmLogout()">退出登录</div>
+        </div>
+      </div>
+    </div>
+  </header>
+  ${isGuest() ? `<div class="guest-banner"><span>👁</span> 你正在以游客身份浏览，仅可查看项目进度 <a onclick="logout()">登录账号</a></div>` : ''}
+  <div class="container">
+    ${renderAlert()}
+    ${renderBigScreen()}
+    <div id="management" class="management-section">
+      ${renderStats()}
+      <div class="sec-head">
+        <div class="sec-title"><div class="sec-dot"></div>全部项目</div>
+      </div>
+      ${renderProjectCards()}
+      <div class="sec-head" style="margin-top:8px;">
+        <div class="sec-title"><div class="sec-dot" style="background:var(--green)"></div>全部任务</div>
+        ${renderBoardToolbar(null)}
+      </div>
+      ${renderFilterBar()}
+      ${viewMode === 'year' ? renderYearView(null) : renderBoard(null)}
+    </div>
+  </div>
+  ${modals()}`;
+}
+
+function renderProjectDetail() {
+  const proj = projById(selectedProjectId);
+  if (!proj.id) { selectedProjectId = null; return renderDashboard(); }
+  const now = new Date();
+  const days = ['日','一','二','三','四','五','六'];
+  const dateStr = `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')} 周${days[now.getDay()]}`;
+  const c = proj.color || 'cyan';
+  const projTasks = tasks.filter(t => t.project_id === proj.id);
+  const done = projTasks.filter(t => t.status === 'done').length;
+  const prog = projTasks.length ? Math.round(done/projTasks.length*100) : 0;
+
+  return `
+  <header class="header">
+    <div class="h-left">
+      <div class="h-mark">${esc(APP_CONFIG.shortName)}</div>
+      <div class="h-breadcrumb">
+        <a onclick="goDashboard()">${esc(APP_CONFIG.appName)}</a>
+        <span class="sep">/</span>
+        <span class="current" style="display:inline-flex;align-items:center;gap:6px;">${projectBadge(proj, 'inline')} ${esc(proj.name)}</span>
+      </div>
+    </div>
+    <div class="h-right">
+      <div class="date-chip">${esc(dateStr)}</div>
+      ${renderThemeButton()}
+      ${currentUser.role==='admin'?`<button class="btn btn-sm" onclick="openEditProject(${proj.id})">编辑项目</button>`:''}
+      ${!isGuest()?`<button class="btn btn-sm btn-primary" onclick="openTaskModal('todo')">+ 任务</button>`:''}
+      <div class="user-chip" onclick="toggleUserMenu(event)">
+        <div class="user-av">${esc(currentUser.avatar||currentUser.display_name.charAt(0))}</div>
+        <span>${esc(currentUser.display_name)}</span>
+        <div class="user-dropdown" id="userDropdown">
+          <div class="user-dropdown-header">
+            <div class="ud-av">${esc(currentUser.avatar||currentUser.display_name.charAt(0))}</div>
+            <div><div class="ud-name">${esc(currentUser.display_name)}</div><div class="ud-role">${currentUser.role==='admin'?'管理员':currentUser.role==='guest'?'游客':'成员'} · @${esc(currentUser.username)}</div></div>
+          </div>
+          <div class="user-dropdown-item danger" onclick="confirmLogout()">退出登录</div>
+        </div>
+      </div>
+    </div>
+  </header>
+  ${isGuest() ? `<div class="guest-banner"><span>👁</span> 你正在以游客身份浏览，仅可查看项目进度 <a onclick="logout()">登录账号</a></div>` : ''}
+  <div class="container">
+    ${renderAlert()}
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+      <button class="back-btn" onclick="goDashboard()">← 返回</button>
+      <div style="flex:1;">
+        <div style="font-size:17px;font-weight:700;display:flex;align-items:center;gap:8px;letter-spacing:0;">
+          ${projectBadge(proj, 'inline')} ${esc(proj.name)}
+          <span style="font-size:11px;color:${CFILL[c]||'var(--cyan)'};font-family:var(--sans);font-weight:600;">${prog}%</span>
+        </div>
+        <div style="font-size:11px;color:var(--text3);margin-top:3px;">${esc(proj.description||'')} · 共 ${projTasks.length} 项任务 · 已完成 ${done} 项</div>
+      </div>
+    </div>
+    <div class="sec-head" style="margin-bottom:14px;">
+      <div class="sec-title"><div class="sec-dot"></div>任务看板</div>
+      ${renderBoardToolbar(proj.id)}
+    </div>
+    ${renderFilterBar()}
+    ${viewMode === 'year' ? renderYearView(proj.id) : renderBoard(proj.id)}
+  </div>
+  ${modals()}`;
+}
+
+function goDashboard() { selectedProjectId = null; render(); }
+function enterProject(id) { selectedProjectId = id; render(); }
+
+function openProjectContext(event, id) {
+  event.preventDefault();
+  event.stopPropagation();
+  if (currentUser?.role === 'admin') {
+    openEditProject(id);
+  } else {
+    toast('仅管理员可编辑项目', 'warn');
+  }
+}
+
+function scrollToManagement() {
+  document.getElementById('management')?.scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+function renderBigScreen() {
+  const total = tasks.length;
+  const done = tasks.filter(t => t.status === 'done').length;
+  const doing = tasks.filter(t => t.status === 'doing').length;
+  const pending = tasks.filter(t => t.status === 'todo').length;
+  const verify = tasks.filter(t => t.status === 'verify').length;
+  const completion = total ? Math.round(done / total * 100) : 0;
+  const projectCards = projects.map(p => {
+    const pt = tasks.filter(t => t.project_id === p.id);
+    const d = pt.filter(t => t.status === 'done').length;
+    const prog = pt.length ? Math.round(d / pt.length * 100) : 0;
+    const meta = projectMeta(p, prog, pt.length);
+    return { ...p, _total:pt.length, _done:d, _unfinished:pt.length-d, _prog:prog, _meta:meta };
+  });
+  const focus = projectCards
+    .filter(p => p._meta.statusRank === 0 || p._unfinished > 0)
+    .sort((a,b) => a._meta.statusRank-b._meta.statusRank || a._meta.priorityRank-b._meta.priorityRank || b._unfinished-a._unfinished)
+    .slice(0, 6);
+  const archived = projectCards.filter(p => p._meta.statusRank >= 2).length;
+  const active = projectCards.filter(p => p._meta.statusRank === 0).length;
+
+  return `
+  <section class="screen">
+    <div class="screen-main">
+      <div>
+        <div class="screen-kicker">${viewYear} · ${esc(BOARD_CONFIG.label)}</div>
+        <div class="screen-title">${esc(BOARD_CONFIG.title)}</div>
+        <div class="screen-sub">${esc(BOARD_CONFIG.subtitle)} 当前聚焦 ${active} 个进行中项目，${archived} 个运维/暂停/完成项目保留入口。</div>
+        <div class="screen-metrics">
+          <div class="screen-metric"><div class="num">${projects.length}</div><div class="label">项目</div></div>
+          <div class="screen-metric"><div class="num">${total}</div><div class="label">任务</div></div>
+          <div class="screen-metric"><div class="num">${doing + verify}</div><div class="label">推进/验证</div></div>
+          <div class="screen-metric"><div class="num">${completion}%</div><div class="label">完成率</div></div>
+        </div>
+        <div class="screen-progress">
+          <div class="screen-progress-row"><span>整体完成</span><span>${done}/${total}</span></div>
+          <div class="screen-progress-track"><div class="screen-progress-fill" style="width:${completion}%"></div></div>
+        </div>
+      </div>
+      <div class="screen-actions">
+        <button class="btn btn-primary" onclick="scrollToManagement()">进入项目管理</button>
+        <button class="btn" onclick="viewMode='year';scrollToManagement();render()">全年任务</button>
+        ${currentUser.role==='admin'?`<button class="btn" onclick="openProjectModal()">新建项目</button>`:''}
+      </div>
+    </div>
+    <div class="screen-side">
+      <div class="screen-side-title">当前重点</div>
+      <div class="focus-list">
+        ${focus.map(p => `
+        <div class="focus-item" onclick="enterProject(${p.id})">
+          <div class="focus-top">
+            <div class="focus-name">${projectBadge(p, 'inline')} ${esc(p.name)}</div>
+            <span class="pchip" style="${projectPriorityStyle(p._meta.priority)}">${esc(p._meta.priority || '-')}</span>
+          </div>
+          <div class="focus-meta">${esc(p._meta.status)} · 未完成 ${p._unfinished} · ${p._prog}%</div>
+          <div class="proj-track" style="margin-top:8px;"><div class="proj-fill" style="width:${p._prog}%;background:${CFILL[p.color]||'var(--cyan)'}"></div></div>
+        </div>`).join('')}
+      </div>
+    </div>
+    <div class="screen-strip">
+      <div style="font-size:12px;font-weight:700;">状态分布</div>
+      <div class="strip-items">
+        <div class="strip-pill">已完成 ${done}</div>
+        <div class="strip-pill">进行中 ${doing}</div>
+        <div class="strip-pill">验证中 ${verify}</div>
+        <div class="strip-pill">待启动 ${pending}</div>
+        <div class="strip-pill">逾期 ${stats.overdueCount || 0}</div>
+      </div>
+    </div>
+  </section>`;
+}
+
+function renderStats() {
+  const s = stats;
+  return `
+  <div class="stats">
+    <div class="stat cyan"><div class="stat-label">总任务</div><div class="stat-val">${s.totalTasks||0}</div><div class="stat-sub">已完成 ${s.totalDone||0} 项</div></div>
+    <div class="stat green"><div class="stat-label">进行中</div><div class="stat-val">${s.doingCount||0}</div><div class="stat-sub">验证中 ${s.reviewCount||0} 项</div></div>
+    <div class="stat amber"><div class="stat-label">完成率</div><div class="stat-val">${s.completionRate||0}%</div><div class="stat-sub">本月 ${s.monthDone||0}/${s.monthTasks||0}</div></div>
+    <div class="stat ${s.overdueCount>0?'red':'green'}"><div class="stat-label">逾期</div><div class="stat-val">${s.overdueCount||0}</div><div class="stat-sub">${s.overdueCount>0?'需处理':'正常'}</div></div>
+  </div>`;
+}
+
+function renderAlert() {
+  if (!stats.overdueTasks || !stats.overdueTasks.length) return '';
+  // 过滤：只显示当前用户有权限调整的逾期任务（管理员全部，成员仅自己创建的，游客无）
+  const actionable = stats.overdueTasks.filter(t => {
+    if (isGuest()) return false;
+    if (currentUser.role === 'admin') return true;
+    return t.created_by === currentUser.id;
+  });
+  if (!actionable.length) return '';
+  return `
+  <div class="alert">
+    <div class="alert-icon">⚠</div>
+    <div style="flex:1">
+      <div class="alert-title">${actionable.length} 项逾期任务需要处理</div>
+      <div class="alert-desc">点击可调整截止时间，支持跨月设置</div>
+      <div class="alert-chips">
+        ${actionable.map(t => `<div class="alert-chip" onclick="openRescheduleModal(${t.id})">${esc(t.title)} · 逾期${daysOverdue(t)}天</div>`).join('')}
+      </div>
+    </div>
+  </div>`;
+}
+
+function projectMeta(project, progress = 0, taskCount = 0) {
+  const desc = String(project.description || '');
+  const status = String(project.status || '').trim() || (desc.match(/状态：([^；;。]+)/) || [])[1] || (progress === 100 && taskCount > 0 ? '已完成' : '进行中');
+  const priority = String(project.priority || project.project_priority || '').trim() || (desc.match(/优先级：\s*(P\d)/i) || [])[1] || '';
+  const role = String(project.role || '').trim() || (desc.match(/角色：([^。；;]+)/) || [])[1] || '';
+  const summary = desc.replace(/^状态：[^。]*。?/, '').trim() || desc;
+  const statusRank = /进行中/.test(status) ? 0
+    : /未开始/.test(status) ? 1
+    : /运维|已完成|完成/.test(status) ? 2
+    : /暂停/.test(status) ? 3
+    : 1;
+  const priorityRank = { P0:0, P1:1, P2:2, P3:3 }[String(priority).toUpperCase()] ?? 9;
+  return { status, priority:String(priority).toUpperCase(), role, summary, statusRank, priorityRank };
+}
+
+function projectStatusStyle(status) {
+  if (/进行中/.test(status)) return 'background:var(--green-dim);color:var(--green)';
+  if (/未开始/.test(status)) return 'background:var(--cyan-dim);color:var(--cyan)';
+  if (/运维|已完成|完成/.test(status)) return 'background:var(--bg3);color:var(--text2)';
+  if (/暂停/.test(status)) return 'background:var(--amber-dim);color:var(--amber)';
+  return 'background:var(--bg3);color:var(--text2)';
+}
+
+function projectPriorityStyle(priority) {
+  if (priority === 'P0' || priority === 'P1') return 'background:var(--red-dim);color:var(--red)';
+  if (priority === 'P2') return 'background:var(--amber-dim);color:var(--amber)';
+  return 'background:var(--bg3);color:var(--text2)';
+}
+function renderProjectCards() {
+  if (!projects.length) return currentUser.role==='admin' ? '<div class="empty-col" style="padding:36px">暂无项目，点击右上角"+ 项目"创建</div>' : '<div class="empty-col" style="padding:36px">暂无项目，请联系管理员分配</div>';
+
+  const enriched = projects.map(p => {
+    const pt = tasks.filter(t => t.project_id === p.id);
+    const done = pt.filter(t => t.status === 'done').length;
+    const prog = pt.length ? Math.round(done/pt.length*100) : 0;
+    const unfinished = pt.length - done;
+    const meta = projectMeta(p, prog, pt.length);
+    return { ...p, _pt: pt, _done: done, _prog: prog, _unfinished: unfinished, _meta: meta };
+  });
+  enriched.sort((a, b) => {
+    if (a._meta.statusRank !== b._meta.statusRank) return a._meta.statusRank - b._meta.statusRank;
+    if (a._meta.priorityRank !== b._meta.priorityRank) return a._meta.priorityRank - b._meta.priorityRank;
+    if (a._unfinished !== b._unfinished) return b._unfinished - a._unfinished;
+    return String(a.end_date || '9999-12-31').localeCompare(String(b.end_date || '9999-12-31'));
+  });
+
+  return `
+  <div class="proj-grid-wrap">
+    <button class="proj-scroll-btn left" onclick="this.parentElement.querySelector('.proj-grid').scrollBy({left:-280,behavior:'smooth'})">◀</button>
+    <div class="proj-grid">
+    ${enriched.map(p => {
+      const pt = p._pt;
+      const done = p._done;
+      const prog = p._prog;
+      const c = p.color || 'cyan';
+      const overdue = pt.filter(isOverdue).length;
+      const doing = pt.filter(t => t.status === 'doing').length;
+      const verify = pt.filter(t => t.status === 'verify').length;
+      const todo = pt.filter(t => t.status === 'todo').length;
+      const isComplete = prog === 100 && pt.length > 0;
+      const isArchived = p._meta.statusRank >= 2;
+      const cardTitle = currentUser.role === 'admin' ? '左键进入，右键编辑' : '点击进入项目';
+      return `
+      <div class="proj-card editable${isComplete ? ' completed' : ''}${isArchived ? ' archived' : ''}" onclick="enterProject(${p.id})" oncontextmenu="openProjectContext(event, ${p.id})" title="${cardTitle}">
+        <div class="proj-top" style="background:${CFILL[c]||'var(--cyan)'}"></div>
+        <div class="proj-icon">${projectBadge(p, 'large')}</div>
+        <div class="proj-name">${esc(p.name)}</div>
+        <div class="proj-meta">
+          <span class="pchip" style="${projectStatusStyle(p._meta.status)}">${esc(p._meta.status)}</span>
+          ${p._meta.priority ? `<span class="pchip" style="${projectPriorityStyle(p._meta.priority)}">${esc(p._meta.priority)}</span>` : ''}
+          ${p._meta.role ? `<span class="pchip" style="background:var(--bg3);color:var(--text2)">${esc(p._meta.role)}</span>` : ''}
+        </div>
+        <div class="proj-desc">${esc(p._meta.summary)}</div>
+        <div class="proj-bar">
+          <div class="proj-track"><div class="proj-fill" style="width:${prog}%;background:${CFILL[c]||'var(--cyan)'}"></div></div>
+          <div class="proj-pct" style="color:${CFILL[c]||'var(--cyan)'}">${prog}%</div>
+        </div>
+        <div class="proj-chips">
+          ${doing?`<span class="pchip" style="background:var(--cyan-dim);color:var(--cyan)">${doing}进行</span>`:''}
+          ${verify?`<span class="pchip" style="background:var(--amber-dim);color:var(--amber)">${verify}验证</span>`:''}
+          ${todo?`<span class="pchip" style="background:var(--subtle-fill);color:var(--text2)">${todo}待启</span>`:''}
+          ${done?`<span class="pchip" style="background:var(--green-dim);color:var(--green)">${done}完成</span>`:''}
+          ${overdue?`<span class="pchip" style="background:var(--red-dim);color:var(--red)">${overdue}逾期</span>`:''}
+        </div>
+        ${p.end_date?`<div class="proj-end">截止 ${esc(fmt(p.end_date))}</div>`:''}
+      </div>`;
+    }).join('')}
+    </div>
+    <button class="proj-scroll-btn right" onclick="this.parentElement.querySelector('.proj-grid').scrollBy({left:280,behavior:'smooth'})">▶</button>
+  </div>`;
+}
+
+function renderFilterBar() {
+  const hasFilter = searchQuery || filterStatus || filterPriority || filterAssignee;
+  return `
+  <div style="display:flex;align-items:center;gap:6px;margin-bottom:12px;flex-wrap:wrap;">
+    <input type="text" placeholder="搜索任务..." value="${esc(searchQuery)}" oninput="debouncedSearch(this.value)"
+      style="flex:1;min-width:140px;padding:6px 10px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-size:12px;font-family:var(--sans);outline:none;">
+    <select onchange="setFilter('status',this.value)" style="padding:5px 8px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);color:${filterStatus?'var(--cyan)':'var(--text2)'};font-size:11px;font-family:var(--sans);cursor:pointer;">
+      <option value="">全部状态</option>
+      <option value="todo" ${filterStatus==='todo'?'selected':''}>待启动</option>
+      <option value="doing" ${filterStatus==='doing'?'selected':''}>进行中</option>
+      <option value="verify" ${filterStatus==='verify'?'selected':''}>验证中</option>
+      <option value="done" ${filterStatus==='done'?'selected':''}>已完成</option>
+    </select>
+    <select onchange="setFilter('priority',this.value)" style="padding:5px 8px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);color:${filterPriority?'var(--cyan)':'var(--text2)'};font-size:11px;font-family:var(--sans);cursor:pointer;">
+      <option value="">全部优先级</option>
+      <option value="high" ${filterPriority==='high'?'selected':''}>高</option>
+      <option value="medium" ${filterPriority==='medium'?'selected':''}>中</option>
+      <option value="low" ${filterPriority==='low'?'selected':''}>低</option>
+    </select>
+    ${hasFilter ? `<button class="btn btn-ghost btn-sm" onclick="searchQuery='';filterStatus='';filterPriority='';filterAssignee='';render()">清除</button>` : ''}
+  </div>`;
+}
+
+function renderBoardToolbar(projectId) {
+  return `
+  <div class="month-nav">
+    <button class="month-btn" onclick="${viewMode === 'year' ? 'navYear(-1)' : 'navMonth(-1)'}">${viewMode === 'year' ? '‹' : '◀'}</button>
+    <div class="month-label" style="font-size:13px;min-width:${viewMode === 'year' ? '64px' : '90px'};">${viewMode === 'year' ? viewYear : `${viewYear} ${MONTHS[viewMonth]}`}</div>
+    <button class="month-btn" onclick="${viewMode === 'year' ? 'navYear(1)' : 'navMonth(1)'}">${viewMode === 'year' ? '›' : '▶'}</button>
+    <div class="view-tabs">
+      <button class="view-tab ${viewMode==='month'?'active':''}" onclick="setViewMode('month')">月</button>
+      <button class="view-tab ${viewMode==='year'?'active':''}" onclick="setViewMode('year')">全年</button>
+    </div>
+    <button class="btn btn-sm" onclick="exportTxt(${projectId || 'null'})">导出TXT</button>
+  </div>`;
+}
+
+function renderBoard(projectId) {
+  const statuses = ['todo','doing','verify','done'];
+
+  let visible = visibleTasks(projectId, 'month');
+  const carryOverCount = visible.filter(t => isCarryOverVerify(t) && !taskInMonth(t, viewYear, viewMonth, false)).length;
+
+  return `
+  ${carryOverCount ? `<div class="carryover-note">验证中逾期 ${carryOverCount} 项已持续显示，直到完成或调整截止日期。</div>` : ''}
+  <div class="kanban">
+    ${statuses.map(status => {
+      const cfg = STATUS[status];
+      const colTasks = visible.filter(t => t.status === status);
+      return `
+      <div class="col" data-status="${status}"
+           ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event,'${status}')">
+        <div class="col-head">
+          <div class="col-label"><div class="col-dot" style="background:${cfg.dot}"></div>${cfg.label}</div>
+          <div class="col-count" style="background:${cfg.cntBg};color:${cfg.cntTxt}">${colTasks.length}</div>
+        </div>
+        <div class="task-list" data-status="${status}">
+          ${colTasks.map((t, i) => renderTask(t, !projectId, i)).join('')}
+          ${colTasks.length === 0 ? '<div class="empty-col">暂无任务</div>' : ''}
+        </div>
+        ${!isGuest() ? `<button class="add-btn" onclick="openTaskModal('${status}')">+ 添加</button>` : ''}
+      </div>`;
+    }).join('')}
+  </div>`;
+}
+
+function renderYearView(projectId) {
+  const allYear = sortTasks(visibleTasks(projectId, 'year'));
+  const maxCount = Math.max(1, ...MONTHS.map((_, m) => monthTasks(projectId, m).length));
+  return `
+  <div class="year-grid">
+    ${MONTHS.map((name, month) => {
+      const list = monthTasks(projectId, month);
+      const done = list.filter(t => t.status === 'done').length;
+      const overdue = list.filter(isOverdue).length;
+      const pct = Math.round(list.length / maxCount * 100);
+      return `
+      <div class="year-card ${month===viewMonth?'active':''}" onclick="openMonth(${month})">
+        <div class="year-card-head">
+          <div class="year-card-title">${name}</div>
+          <div class="year-card-count">${list.length}</div>
+        </div>
+        <div class="year-card-track"><div class="year-card-fill" style="width:${pct}%"></div></div>
+        <div class="year-card-meta">
+          <span class="year-pill">完成 ${done}</span>
+          ${overdue ? `<span class="year-pill" style="color:var(--red);background:var(--red-dim)">逾期 ${overdue}</span>` : ''}
+          ${list.length ? `<span class="year-pill">${list.filter(t=>t.status!=='done').length} 未完成</span>` : '<span class="year-pill">无任务</span>'}
+        </div>
+      </div>`;
+    }).join('')}
+  </div>
+  <div class="year-sections">
+    ${MONTHS.map((name, month) => {
+      const list = sortTasks(monthTasks(projectId, month));
+      if (!list.length) return '';
+      return `
+      <div class="year-section">
+        <div class="year-section-head">
+          <div class="year-section-title">${viewYear} ${name}</div>
+          <div class="year-section-count">${list.length} 项</div>
+        </div>
+        <div class="year-task-list">
+          ${list.map((t, i) => renderTask(t, !projectId, i, false)).join('')}
+        </div>
+      </div>`;
+    }).join('')}
+  </div>
+  ${allYear.length ? '' : '<div class="empty-col" style="padding:36px">本年暂无任务</div>'}`;
+}
+
+function renderTask(t, showProjName, index, draggable = true) {
+  const proj = projById(t.project_id);
+  const c = proj.color || 'cyan';
+  const overdue = isOverdue(t);
+  const warn = isWarn(t);
+  const extended = t.extended;
+  const isDone = t.status === 'done';
+  const canModify = draggable && (currentUser.role === 'admin' || (t.created_by === currentUser.id && !isDone));
+  const cls = overdue ? 'tcard overdue' : warn ? 'tcard warn' : extended ? 'tcard extended' : 'tcard';
+  const dlCls = overdue ? 'tcard-dl overdue' : warn ? 'tcard-dl warn' : 'tcard-dl';
+
+  return `
+  <div class="${cls}" draggable="${canModify}"
+       data-task-id="${t.id}" data-status="${esc(t.status)}" data-index="${index}"
+       ${canModify ? `ondragstart="handleDragStart(event,${t.id},'${esc(t.status)}')"
+       ondragend="handleDragEnd(event)"` : ''}
+       onclick="openEditTask(${t.id})">
+    <div class="tcard-title">${isDone ? '<span style="color:var(--green);margin-right:4px;">✓</span>' : ''}${esc(t.title)}</div>
+    ${showProjName ? `<div class="tcard-proj" style="background:${CBG[c]};color:${CFILL[c]}">${projectBadge(proj, 'inline')} ${esc(proj.name)}</div>` : ''}
+    ${t.description ? `<div class="tcard-desc">${esc(t.description)}</div>` : ''}
+    ${t.assignee_name ? `<div class="tcard-assignee">→ ${esc(t.assignee_name)}</div>` : ''}
+    <div class="tcard-footer">
+      <div class="${dlCls}">${esc(fmt(t.deadline))}</div>
+      <div class="tcard-badges">
+        ${overdue ? `<span class="overdue-tag">逾期${daysOverdue(t)}d</span>` : ''}
+        ${extended ? `<span class="extended-tag">延期</span>` : ''}
+        ${isDone && !canModify ? `<span style="font-size:8px;color:var(--text3);font-family:var(--mono);">🔒 已锁定</span>` : ''}
+        <div class="prio-dot" style="background:${isDone ? 'var(--green)' : (PRIO[t.priority]||'var(--text3)')}" title="${isDone ? '已完成' : `优先级: ${PRIO_LABEL[t.priority]||t.priority}`}"></div>
+      </div>
+    </div>
+    ${overdue && canModify ? `<button class="reschedule-btn" onclick="event.stopPropagation();openRescheduleModal(${t.id})">调整截止日</button>` : ''}
+  </div>`;
+}
+
+// ══════════════════════════════════════
+//  Drag & Drop Handlers
+// ══════════════════════════════════════
+function handleDragStart(e, taskId, status) {
+  dragTaskId = taskId;
+  dragSourceStatus = status;
+  e.target.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/plain', String(taskId));
+  setTimeout(() => { e.target.style.opacity = '0.35'; }, 0);
+}
+
+function handleDragEnd(e) {
+  e.target.classList.remove('dragging');
+  e.target.style.opacity = '';
+  document.querySelectorAll('.col.drag-over').forEach(el => el.classList.remove('drag-over'));
+  document.querySelectorAll('.drop-indicator').forEach(el => el.remove());
+  dragTaskId = null;
+  dragSourceStatus = null;
+}
+
+function handleDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+
+  const col = e.target.closest('.col');
+  if (!col) return;
+  col.classList.add('drag-over');
+
+  const taskList = col.querySelector('.task-list');
+  if (!taskList) return;
+
+  document.querySelectorAll('.drop-indicator').forEach(el => el.remove());
+
+  const cards = [...taskList.querySelectorAll('.tcard:not(.dragging)')];
+  const afterCard = cards.find(card => {
+    const rect = card.getBoundingClientRect();
+    return e.clientY < rect.top + rect.height / 2;
+  });
+
+  const indicator = document.createElement('div');
+  indicator.className = 'drop-indicator';
+  if (afterCard) {
+    taskList.insertBefore(indicator, afterCard);
+  } else {
+    taskList.appendChild(indicator);
+  }
+}
+
+function handleDragLeave(e) {
+  const col = e.target.closest('.col');
+  if (col && !col.contains(e.relatedTarget)) {
+    col.classList.remove('drag-over');
+    col.querySelectorAll('.drop-indicator').forEach(el => el.remove());
+  }
+}
+
+async function handleDrop(e, targetStatus) {
+  e.preventDefault();
+  const col = e.target.closest('.col');
+  if (col) col.classList.remove('drag-over');
+  document.querySelectorAll('.drop-indicator').forEach(el => el.remove());
+
+  if (!dragTaskId) return;
+
+  const taskId = dragTaskId;
+  const sourceStatus = dragSourceStatus;
+
+  const taskList = col ? col.querySelector('.task-list') : null;
+  let targetIndex = 0;
+
+  if (taskList) {
+    const cards = [...taskList.querySelectorAll('.tcard:not(.dragging)')];
+    const afterCard = cards.find(card => {
+      const rect = card.getBoundingClientRect();
+      return e.clientY < rect.top + rect.height / 2;
+    });
+    if (afterCard) {
+      targetIndex = parseInt(afterCard.dataset.index || 0);
+    } else {
+      targetIndex = cards.length;
+    }
+  }
+
+  const task = tasks.find(t => t.id === taskId);
+  if (!task) { dragTaskId = null; return; }
+
+  if (currentUser.role !== 'admin' && (task.created_by !== currentUser.id || task.status === 'done')) {
+    toast(currentUser.role !== 'admin' && task.status === 'done' ? '已完成的任务不能拖拽' : '只能移动自己创建的任务','error');
+    dragTaskId = null;
+    return;
+  }
+
+  const newStatus = targetStatus;
+  const statusChanged = sourceStatus !== newStatus;
+
+  const projectId = selectedProjectId;
+  let visibleInTarget = tasks.filter(t => {
+    if (t.id === taskId) return false;
+    if (projectId && t.project_id !== projectId) return false;
+    return t.status === targetStatus && taskInMonth(t, viewYear, viewMonth, true);
+  });
+
+  const newPriority = calcPriority(targetIndex, visibleInTarget.length + 1);
+
+  const items = [];
+  let sortOrder = 0;
+  for (let i = 0; i <= visibleInTarget.length; i++) {
+    if (i === targetIndex) {
+      items.push({ id: taskId, status: newStatus, priority: newPriority, sort_order: sortOrder++ });
+    }
+    if (i < visibleInTarget.length) {
+      const existingTask = visibleInTarget[i];
+      const prio = statusChanged ? existingTask.priority : calcPriority(i >= targetIndex ? i + 1 : i, visibleInTarget.length + 1);
+      items.push({ id: existingTask.id, status: newStatus, priority: prio, sort_order: sortOrder++ });
+    }
+  }
+
+  if (!statusChanged && items.length === 1 && items[0].priority === task.priority) {
+    dragTaskId = null;
+    return;
+  }
+
+  // Save old state for rollback
+  const rollbackItems = items.map(item => {
+    const t = tasks.find(x => x.id === item.id);
+    return t ? { id: t.id, status: t.status, priority: t.priority, sort_order: t.sort_order } : null;
+  }).filter(Boolean);
+
+  // Optimistic update: apply changes locally first
+  for (const item of items) {
+    const t = tasks.find(x => x.id === item.id);
+    if (t) {
+      t.status = item.status;
+      t.priority = item.priority;
+      t.sort_order = item.sort_order;
+    }
+  }
+  render();
+
+  try {
+    await POST('/api/tasks/reorder', { items });
+    if (statusChanged) {
+      toast(`已移至「${STATUS[newStatus].label}」`);
+    } else {
+      toast('优先级已调整');
+    }
+    await loadAll();
+    render();
+  } catch(e) {
+    // Rollback on failure
+    for (const item of rollbackItems) {
+      const t = tasks.find(x => x.id === item.id);
+      if (t) {
+        t.status = item.status;
+        t.priority = item.priority;
+        t.sort_order = item.sort_order;
+      }
+    }
+    render();
+    toast(e.message, 'error');
+  }
+
+  dragTaskId = null;
+}
+
+// ══════════════════════════════════════
+//  Modals
+// ══════════════════════════════════════
+function modals() {
+  return `
+  <div class="modal-bg" id="taskModal" onclick="if(event.target===this)closeModal('taskModal')"><div class="modal-box" id="taskModalBox"></div></div>
+  <div class="modal-bg" id="rescheduleModal" onclick="if(event.target===this)closeModal('rescheduleModal')"><div class="modal-box" id="rescheduleModalBox"></div></div>
+  <div class="modal-bg" id="projectModal" onclick="if(event.target===this)closeModal('projectModal')"><div class="modal-box" id="projectModalBox"></div></div>
+  <div class="modal-bg" id="userModal" onclick="if(event.target===this)closeModal('userModal')"><div class="modal-box" id="userModalBox"></div></div>`;
+}
+
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+// ─── Task ───
+let editingTaskId = null;
+
+async function openTaskModal(statusPrefill) {
+  editingTaskId = null;
+  const defaultProject = selectedProjectId || (projects[0] ? projects[0].id : '');
+  if (defaultProject) await loadProjectMembers(defaultProject);
+  document.getElementById('taskModalBox').innerHTML = taskForm({ status: statusPrefill||'todo', project_id: defaultProject });
+  openModal('taskModal');
+}
+
+async function openEditTask(id) {
+  const t = tasks.find(x => x.id === id);
+  if (!t) return;
+  // 所有角色均可点击查看详情，taskForm 会根据权限自动切换只读/编辑模式
+  editingTaskId = id;
+  const overdue = isOverdue(t);
+  await loadProjectMembers(t.project_id);
+  document.getElementById('taskModalBox').innerHTML = taskForm(t, overdue);
+  openModal('taskModal');
+}
+
+function taskForm(t, isOverdueTask) {
+  const isNew = !editingTaskId; // 新建任务时 editingTaskId 为 null
+  const isDone = t.status === 'done';
+  // 新建任务：任何有项目权限的用户都可以创建
+  // 编辑任务：管理员可编辑所有，非管理员只能编辑自己创建的未完成任务
+  const canEdit = isNew || currentUser.role === 'admin' || (t.created_by === currentUser.id && !isDone);
+  const readOnly = !canEdit;
+  const canDelete = currentUser.role === 'admin' && editingTaskId;
+
+  return `
+    <div class="modal-head">
+      <div class="modal-title">${readOnly ? '查看任务' : editingTaskId ? '编辑任务' : '新建任务'}</div>
+      <button class="modal-x" onclick="closeModal('taskModal')">×</button>
+    </div>
+    ${isDone && currentUser.role !== 'admin' ? `<div style="background:var(--green-dim);border:1px solid rgba(52,211,153,0.15);border-radius:var(--radius-sm);padding:12px;margin-bottom:14px;"><h4 style="font-size:11px;color:var(--green);font-weight:600;">✓ 此任务已完成</h4><p style="font-size:10px;color:rgba(52,211,153,0.7);margin-top:2px;">已完成的任务不可修改，仅管理员可编辑</p></div>` : ''}
+    ${isOverdueTask ? `<div class="warn-box"><h4>⚠ 此任务已逾期 ${daysOverdue(t)} 天</h4><p>原截止：${esc(fmt(t.deadline))}，请修改截止时间或标记为完成</p></div>` : ''}
+    <div class="field"><label>任务名称</label><input type="text" id="fTitle" value="${esc(t.title||'')}" placeholder="输入任务名称" ${readOnly?'disabled':''}></div>
+    <div class="field">
+      <label>所属项目</label>
+      <select id="fProject" ${readOnly||editingTaskId?'disabled':''} onchange="onProjectSelectChange()">
+        ${projects.map(p => `<option value="${p.id}" ${p.id==(t.project_id||'')?'selected':''}>${esc(p.icon)} ${esc(p.name)}</option>`).join('')}
+      </select>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>状态</label>
+        <select id="fStatus" ${readOnly?'disabled':''}>
+          <option value="todo" ${t.status==='todo'?'selected':''}>待启动</option>
+          <option value="doing" ${t.status==='doing'?'selected':''}>进行中</option>
+          <option value="verify" ${t.status==='verify'?'selected':''}>验证中</option>
+          <option value="done" ${t.status==='done'?'selected':''}>已完成</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>优先级</label>
+        <select id="fPriority" ${readOnly?'disabled':''}>
+          <option value="low" ${t.priority==='low'?'selected':''}>低</option>
+          <option value="medium" ${t.priority==='medium'?'selected':''}>中</option>
+          <option value="high" ${t.priority==='high'?'selected':''}>高</option>
+        </select>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>开始时间</label><input type="date" id="fStart" value="${esc(t.start_date||'')}" ${readOnly?'disabled':''}></div>
+      <div class="field"><label>截止时间</label><input type="date" id="fDeadline" value="${esc(t.deadline||'')}" ${readOnly?'disabled':''}></div>
+    </div>
+    <div class="field"><label>描述</label><textarea id="fDesc" rows="2" placeholder="简要描述..." ${readOnly?'disabled':''}>${esc(t.description||'')}</textarea></div>
+    <div class="field">
+      <label>负责人</label>
+      <select id="fAssignee" ${readOnly?'disabled':''} onchange="/* assignee changed */">
+        <option value="">未指派</option>
+        ${projectMembers.map(m => `<option value="${m.id}" ${(t.assigned_to||'')==m.id?'selected':''}>${esc(m.display_name)}</option>`).join('')}
+      </select>
+    </div>
+    <div class="modal-foot">
+      ${editingTaskId && canDelete ? `<button class="btn btn-danger btn-sm" onclick="deleteTask(${editingTaskId})">删除</button>` : ''}
+      <button class="btn btn-sm" onclick="closeModal('taskModal')">${readOnly?'关闭':'取消'}</button>
+      ${canEdit ? `<button class="btn btn-primary btn-sm" onclick="saveTask()">保存</button>` : ''}
+    </div>`;
+}
+
+async function saveTask() {
+  if (isSaving) return;
+  const title = document.getElementById('fTitle').value.trim();
+  const project_id = parseInt(document.getElementById('fProject').value) || selectedProjectId;
+  const status = document.getElementById('fStatus').value;
+  const priority = document.getElementById('fPriority').value;
+  const start_date = document.getElementById('fStart').value;
+  const deadline = document.getElementById('fDeadline').value;
+  const description = document.getElementById('fDesc').value.trim();
+  const assigneeEl = document.getElementById('fAssignee');
+  const assigned_to = assigneeEl ? (parseInt(assigneeEl.value) || null) : null;
+  if (!title) { toast('请输入任务名称','error'); return; }
+  if (!deadline) { toast('请选择截止时间','error'); return; }
+
+  isSaving = true;
+  const saveBtn = document.querySelector('#taskModalBox .btn-primary');
+  if (saveBtn) { saveBtn.disabled = true; saveBtn.textContent = '保存中...'; }
+  try {
+    if (editingTaskId) {
+      await PUT(`/api/tasks/${editingTaskId}`, { title, project_id, status, priority, start_date, deadline, description, assigned_to });
+      toast('任务已更新');
+    } else {
+      await POST('/api/tasks', { title, project_id, status, priority, start_date, deadline, description, assigned_to });
+      toast('任务已创建');
+    }
+    closeModal('taskModal');
+    await loadAll();
+    render();
+  } catch(e) { toast(e.message,'error'); }
+  finally { isSaving = false; }
+}
+
+async function deleteTask(id) {
+  if (!confirm('确认删除此任务？此操作不可恢复。')) return;
+  try {
+    await DEL(`/api/tasks/${id}`);
+    toast('任务已删除','warn');
+    closeModal('taskModal');
+    await loadAll();
+    render();
+  } catch(e) { toast(e.message,'error'); }
+}
+
+// ─── Reschedule ───
+function openRescheduleModal(id) {
+  const t = tasks.find(x => x.id === id);
+  if (!t) return;
+  const canModify = currentUser.role === 'admin' || (t.created_by === currentUser.id && t.status !== 'done');
+  if (!canModify) { toast('你无权调整此任务的截止日期', 'warn'); return; }
+  const old = new Date(t.deadline + 'T00:00:00');
+  const nw = new Date(old); nw.setMonth(nw.getMonth() + 1);
+
+  document.getElementById('rescheduleModalBox').innerHTML = `
+    <div class="modal-head"><div class="modal-title">调整逾期任务</div><button class="modal-x" onclick="closeModal('rescheduleModal')">×</button></div>
+    <div class="warn-box"><h4>⚠ 已逾期 ${daysOverdue(t)} 天</h4><p>原截止：${esc(fmt(t.deadline))}</p></div>
+    <div class="field"><label>任务</label><input type="text" value="${esc(t.title)}" disabled></div>
+    <div class="field"><label>新截止日期</label><input type="date" id="fRDate" value="${nw.toISOString().slice(0,10)}"></div>
+    <div class="field"><label>延期原因</label><textarea id="fRReason" rows="2" placeholder="说明原因..."></textarea></div>
+    <div class="modal-foot">
+      <button class="btn btn-sm" onclick="closeModal('rescheduleModal')">取消</button>
+      <button class="btn btn-primary btn-sm" onclick="saveReschedule(${t.id})">确认</button>
+    </div>`;
+  closeModal('taskModal');
+  openModal('rescheduleModal');
+}
+
+async function saveReschedule(id) {
+  const deadline = document.getElementById('fRDate').value;
+  const extended_reason = document.getElementById('fRReason').value.trim();
+  if (!deadline) { toast('请选择日期','error'); return; }
+  try {
+    await PUT(`/api/tasks/${id}`, { deadline, extended:1, extended_reason });
+    toast(`已调整至 ${fmt(deadline)}`);
+    closeModal('rescheduleModal');
+    await loadAll();
+    render();
+  } catch(e) { toast(e.message,'error'); }
+}
+
+// ─── Project ───
+let editingProjectId = null;
+
+function openProjectModal() {
+  editingProjectId = null;
+  document.getElementById('projectModalBox').innerHTML = projectForm({});
+  openModal('projectModal');
+}
+
+function openEditProject(id) {
+  const p = projects.find(x => x.id === id);
+  if (!p) return;
+  editingProjectId = id;
+  document.getElementById('projectModalBox').innerHTML = projectForm(p);
+  openModal('projectModal');
+}
+
+function projectForm(p) {
+  const canDelete = currentUser.role === 'admin' && editingProjectId;
+  return `
+    <div class="modal-head"><div class="modal-title">${editingProjectId ? '编辑项目' : '新建项目'}</div><button class="modal-x" onclick="closeModal('projectModal')">×</button></div>
+    <div class="field"><label>项目名称</label><input type="text" id="fPName" value="${esc(p.name||'')}" placeholder="项目名称" autofocus></div>
+    <div class="field-row">
+      <div class="field"><label>图标</label><select id="fPIcon">${['🚀','📊','📱','🔒','⚡','🎯','🌐','🎨','📝','🔧','💡','🏗️'].map(i=>`<option value="${i}" ${p.icon===i?'selected':''}>${i}</option>`).join('')}</select></div>
+      <div class="field"><label>颜色</label><select id="fPColor">${['cyan','green','amber','red','purple','teal'].map(c=>`<option value="${c}" ${p.color===c?'selected':''}>${c}</option>`).join('')}</select></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>项目状态</label><select id="fPStatus">${['进行中','未开始','已完成','运维阶段','已暂停'].map(s=>`<option value="${s}" ${(p.status||'')===s?'selected':''}>${s}</option>`).join('')}</select></div>
+      <div class="field"><label>项目优先级</label><select id="fPPriority">${['P0','P1','P2','P3'].map(v=>`<option value="${v}" ${(p.priority||p.project_priority||'')===v?'selected':''}>${v}</option>`).join('')}</select></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>项目角色</label><input type="text" id="fPRole" value="${esc(p.role||'')}" placeholder="推进 / 开发 / 主导"></div>
+      <div class="field"><label>原始结束说明</label><input type="text" id="fPOriginalEnd" value="${esc(p.original_end_date||'')}" placeholder="长期 / 暂无结束时间"></div>
+    </div>
+    <div class="field"><label>描述</label><input type="text" id="fPDesc" value="${esc(p.description||'')}" placeholder="一句话描述"></div>
+    <div class="field-row">
+      <div class="field"><label>开始时间</label><input type="date" id="fPStart" value="${esc(p.start_date||'')}"></div>
+      <div class="field"><label>预计完成</label><input type="date" id="fPEnd" value="${esc(p.end_date||'')}"></div>
+    </div>
+    ${canDelete ? `<div style="margin-top:8px;"><button class="btn btn-danger btn-sm" onclick="deleteProject(${editingProjectId})">删除项目及所有任务</button></div>` : ''}
+    <div class="modal-foot">
+      <button class="btn btn-sm" onclick="closeModal('projectModal')">取消</button>
+      <button class="btn btn-primary btn-sm" onclick="saveProject()">保存</button>
+    </div>`;
+}
+
+async function saveProject() {
+  const name = document.getElementById('fPName').value.trim();
+  if (!name) { toast('请输入项目名称','error'); return; }
+  const data = {
+    name, icon:document.getElementById('fPIcon').value, color:document.getElementById('fPColor').value,
+    description:document.getElementById('fPDesc').value.trim(),
+    start_date:document.getElementById('fPStart').value, end_date:document.getElementById('fPEnd').value,
+    status:document.getElementById('fPStatus').value,
+    project_priority:document.getElementById('fPPriority').value,
+    role:document.getElementById('fPRole').value.trim(),
+    original_end_date:document.getElementById('fPOriginalEnd').value.trim(),
+  };
+  try {
+    if (editingProjectId) { await PUT(`/api/projects/${editingProjectId}`, data); toast('项目已更新'); }
+    else { await POST('/api/projects', data); toast('项目已创建'); }
+    closeModal('projectModal');
+    await loadAll();
+    render();
+  } catch(e) { toast(e.message,'error'); }
+}
+
+async function deleteProject(id) {
+  if (!confirm('删除项目将同时删除其下所有任务，此操作不可恢复。确认？')) return;
+  try {
+    await DEL(`/api/projects/${id}`);
+    toast('项目已删除','warn');
+    closeModal('projectModal');
+    selectedProjectId = null;
+    await loadAll();
+    render();
+  } catch(e) { toast(e.message,'error'); }
+}
+
+// ─── User Management ───
+async function openUserModal() {
+  try { users = await GET('/api/auth/users'); if(!Array.isArray(users)) users=[]; } catch(_) { users=[]; }
+  document.getElementById('userModalBox').innerHTML = renderUserContent();
+  openModal('userModal');
+}
+
+function renderUserContent() {
+  return `
+    <div class="modal-head"><div class="modal-title">用户管理</div><button class="modal-x" onclick="closeModal('userModal')">×</button></div>
+    <div style="margin-bottom:12px;"><button class="btn btn-sm btn-primary" onclick="showAddUser()">+ 新建用户</button></div>
+    <div id="addUserArea"></div>
+    <div class="user-list">
+      ${users.map(u => {
+        const userProjects = (u.project_ids||[]).map(pid => {
+          const p = projects.find(x=>x.id===pid);
+          return p ? `${p.icon} ${p.name}` : '';
+        }).filter(Boolean);
+        return `
+        <div class="user-row">
+          <div class="user-info" style="flex:1;min-width:0;">
+            <div class="user-info-av">${esc(u.avatar||u.display_name.charAt(0))}</div>
+            <div style="min-width:0;flex:1;">
+              <div class="user-info-name">${esc(u.display_name)} <span style="color:var(--text3);font-size:10px;font-family:var(--mono)">@${esc(u.username)}</span></div>
+              <span class="role-tag ${u.role==='admin'?'role-admin':'role-member'}">${u.role==='admin'?'管理员':'成员'}</span>
+              ${u.role!=='admin' && userProjects.length ? `<div style="font-size:9px;color:var(--text3);margin-top:3px;font-family:var(--mono);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${esc(userProjects.join(', '))}">📋 ${esc(userProjects.join(' · '))}</div>` : ''}
+              ${u.role!=='admin' && !userProjects.length ? `<div style="font-size:9px;color:var(--amber);margin-top:3px;font-family:var(--mono);">⚠ 未分配项目</div>` : ''}
+            </div>
+          </div>
+          <div class="user-actions">
+            <button class="btn btn-sm" onclick="editUser(${u.id})">编辑</button>
+            ${u.id!==currentUser.id?`<button class="btn btn-sm btn-danger" onclick="deleteUser(${u.id})">删除</button>`:''}
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+    <div class="modal-foot"><button class="btn btn-sm" onclick="closeModal('userModal')">关闭</button></div>`;
+}
+
+function showAddUser() {
+  document.getElementById('addUserArea').innerHTML = `
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;margin-bottom:12px;">
+      <div class="field-row">
+        <div class="field"><label>用户名</label><input type="text" id="fNU" placeholder="登录用户名"></div>
+        <div class="field"><label>密码</label><input type="password" id="fNP" placeholder="至少4位"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>显示名称</label><input type="text" id="fND" placeholder="如：张三"></div>
+        <div class="field"><label>角色</label><select id="fNR" onchange="toggleProjectCheckboxes()"><option value="member">成员</option><option value="admin">管理员</option></select></div>
+      </div>
+      <div id="projectCheckboxes" style="margin-bottom:8px;">
+        <label style="font-size:11px;font-weight:600;color:var(--text2);letter-spacing:0.5px;font-family:var(--mono);display:block;margin-bottom:6px;">项目权限</label>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          ${projects.map(p => `<label style="display:flex;align-items:center;gap:4px;background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:4px 8px;cursor:pointer;font-size:11px;"><input type="checkbox" class="proj-check" value="${p.id}">${esc(p.icon)} ${esc(p.name)}</label>`).join('')}
+        </div>
+      </div>
+      <div style="display:flex;gap:6px;margin-top:2px;">
+        <button class="btn btn-sm btn-primary" onclick="createUser()">创建</button>
+        <button class="btn btn-sm" onclick="document.getElementById('addUserArea').innerHTML=''">取消</button>
+      </div>
+    </div>`;
+  toggleProjectCheckboxes();
+}
+
+function toggleProjectCheckboxes() {
+  const role = document.getElementById('fNR') || document.getElementById('fERole');
+  const box = document.getElementById('projectCheckboxes');
+  if (!box) return;
+  if (role && role.value === 'admin') {
+    box.style.opacity = '0.4';
+    box.style.pointerEvents = 'none';
+    const label = box.querySelector('label');
+    if (label) label.textContent = '项目权限（管理员默认拥有全部权限）';
+  } else {
+    box.style.opacity = '1';
+    box.style.pointerEvents = 'auto';
+    const label = box.querySelector('label');
+    if (label) label.textContent = '项目权限';
+  }
+}
+
+async function createUser() {
+  const username = document.getElementById('fNU').value.trim();
+  const password = document.getElementById('fNP').value;
+  const display_name = document.getElementById('fND').value.trim();
+  const role = document.getElementById('fNR').value;
+  const project_ids = [...document.querySelectorAll('.proj-check:checked')].map(c => parseInt(c.value));
+  if (!username||!password||!display_name) { toast('请填写完整','error'); return; }
+  try {
+    await POST('/api/auth/users', { username, password, display_name, role, project_ids });
+    toast('用户已创建');
+    users = await GET('/api/auth/users'); if(!Array.isArray(users)) users=[];
+    document.getElementById('userModalBox').innerHTML = renderUserContent();
+  } catch(e) { toast(e.message,'error'); }
+}
+
+function editUser(id) {
+  const u = users.find(x => x.id === id);
+  if (!u) return;
+  const uPids = u.project_ids || [];
+  document.getElementById('addUserArea').innerHTML = `
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;margin-bottom:12px;">
+      <div class="field-row">
+        <div class="field"><label>显示名称</label><input type="text" id="fEName" value="${esc(u.display_name)}"></div>
+        <div class="field"><label>新密码（留空不改）</label><input type="password" id="fEPass" placeholder="留空不修改"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>角色</label><select id="fERole" onchange="toggleProjectCheckboxes()"><option value="member" ${u.role==='member'?'selected':''}>成员</option><option value="admin" ${u.role==='admin'?'selected':''}>管理员</option></select></div>
+        <div class="field"></div>
+      </div>
+      <div id="projectCheckboxes" style="margin-bottom:8px;">
+        <label style="font-size:11px;font-weight:600;color:var(--text2);letter-spacing:0.5px;font-family:var(--mono);display:block;margin-bottom:6px;">项目权限</label>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          ${projects.map(p => `<label style="display:flex;align-items:center;gap:4px;background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:4px 8px;cursor:pointer;font-size:11px;"><input type="checkbox" class="proj-check" value="${p.id}" ${uPids.includes(p.id)?'checked':''}>${esc(p.icon)} ${esc(p.name)}</label>`).join('')}
+        </div>
+      </div>
+      <div style="display:flex;gap:6px;margin-top:2px;">
+        <button class="btn btn-sm btn-primary" onclick="updateUser(${u.id})">保存</button>
+        <button class="btn btn-sm" onclick="document.getElementById('addUserArea').innerHTML=''">取消</button>
+      </div>
+    </div>`;
+  toggleProjectCheckboxes();
+}
+
+async function updateUser(id) {
+  const display_name = document.getElementById('fEName').value.trim();
+  const role = document.getElementById('fERole').value;
+  const password = document.getElementById('fEPass').value;
+  const project_ids = [...document.querySelectorAll('.proj-check:checked')].map(c => parseInt(c.value));
+  if (!display_name) { toast('名称不能为空','error'); return; }
+  try {
+    const data = { display_name, role, avatar:display_name.charAt(0), project_ids };
+    if (password) data.password = password;
+    await PUT(`/api/auth/users/${id}`, data);
+    toast('用户已更新');
+    users = await GET('/api/auth/users'); if(!Array.isArray(users)) users=[];
+    document.getElementById('userModalBox').innerHTML = renderUserContent();
+  } catch(e) { toast(e.message,'error'); }
+}
+
+async function deleteUser(id) {
+  if (!confirm('确认删除此用户？其关联的任务分配将被清除。')) return;
+  try {
+    await DEL(`/api/auth/users/${id}`);
+    toast('用户已删除','warn');
+    users = await GET('/api/auth/users'); if(!Array.isArray(users)) users=[];
+    document.getElementById('userModalBox').innerHTML = renderUserContent();
+  } catch(e) { toast(e.message,'error'); }
+}
+
+// ══════════════════════════════════════
+//  Keyboard Shortcuts
+// ══════════════════════════════════════
+document.addEventListener('keydown', (e) => {
+  // Escape to close modals
+  if (e.key === 'Escape') {
+    ['taskModal','rescheduleModal','projectModal','userModal'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el && el.classList.contains('open')) {
+        el.classList.remove('open');
+      }
+    });
+    closeUserMenu();
+  }
+  // Enter to submit in task modal
+  if (e.key === 'Enter' && e.ctrlKey) {
+    const taskModal = document.getElementById('taskModal');
+    if (taskModal && taskModal.classList.contains('open')) {
+      const saveBtn = taskModal.querySelector('.btn-primary');
+      if (saveBtn) saveBtn.click();
+    }
+  }
+});
+
+// ══════════════════════════════════════
+//  Nav
+// ══════════════════════════════════════
+function navMonth(delta) {
+  viewMonth += delta;
+  if (viewMonth < 0) { viewMonth = 11; viewYear--; }
+  if (viewMonth > 11) { viewMonth = 0; viewYear++; }
+  render();
+}
+
+function navYear(delta) {
+  viewYear += delta;
+  render();
+}
+
+function setViewMode(mode) {
+  viewMode = mode;
+  render();
+}
+
+function openMonth(month) {
+  viewMonth = month;
+  viewMode = 'month';
+  render();
+}
+
+function exportTxt(projectId) {
+  const scope = projectId ? projById(projectId).name || '项目' : '全部项目';
+  const modeLabel = viewMode === 'year' ? `${viewYear} 全年` : `${viewYear} ${MONTHS[viewMonth]}`;
+  const list = sortTasks(visibleTasks(projectId, viewMode));
+  const lines = [
+    APP_CONFIG.exportTitle,
+    `范围：${scope} / ${modeLabel}`,
+    `导出时间：${new Date().toLocaleString('zh-CN')}`,
+    `任务数：${list.length}`,
+    ''
+  ];
+  if (!list.length) lines.push('暂无任务');
+  list.forEach((t, i) => {
+    const p = projById(t.project_id);
+    lines.push(`${i + 1}. ${t.title || ''}`);
+    lines.push(`   项目：${p.name || '-'}`);
+    lines.push(`   状态：${STATUS[t.status]?.label || t.status || '-'}    优先级：${PRIO_LABEL[t.priority] || t.priority || '-'}`);
+    lines.push(`   开始：${fmtFull(t.start_date) || '-'}    截止：${fmtFull(t.deadline) || '-'}`);
+    lines.push(`   负责人：${t.assignee_name || '未指派'}`);
+    if (t.description) lines.push(`   描述：${String(t.description).replace(/\s+/g, ' ')}`);
+    lines.push('');
+  });
+  const blob = new Blob([lines.join('\r\n')], { type: 'text/plain;charset=utf-8' });
+  const a = document.createElement('a');
+  const fileScope = projectId ? `project-${projectId}` : 'all';
+  const fileRange = viewMode === 'year' ? `${viewYear}` : `${viewYear}-${String(viewMonth + 1).padStart(2,'0')}`;
+  a.href = URL.createObjectURL(blob);
+  a.download = `${APP_CONFIG.filePrefix}-${fileScope}-${fileRange}.txt`;
+  document.body.appendChild(a);
+  a.click();
+  URL.revokeObjectURL(a.href);
+  a.remove();
+  toast('TXT 已导出');
+}
+
+// ══════════════════════════════════════
+//  Init
+// ══════════════════════════════════════
+async function init() {
+  if (TOKEN) {
+    try {
+      // 游客 token 无法通过 /me 验证（id=0 不在数据库中），从 JWT payload 重建
+      const payload = decodeJwtPayload(TOKEN);
+      if (payload.role === 'guest') {
+        currentUser = { id: 0, username: 'guest', display_name: '游客', role: 'guest', avatar: '👁' };
+      } else {
+        currentUser = await GET('/api/auth/me');
+      }
+      await loadAll();
+    } catch(e) {
+      TOKEN = '';
+      localStorage.removeItem('kanban_token');
+    }
+  }
+  render();
+}
+
+init();
+</script>
+</body>
+</html>

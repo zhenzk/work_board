@@ -1,0 +1,99 @@
+<svg width="1280" height="720" viewBox="0 0 1280 720" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Year view preview</title>
+  <desc id="desc">A yearly task overview with twelve month cards and task sections.</desc>
+  <rect width="1280" height="720" rx="28" fill="#F5F5F7"/>
+  <rect x="40" y="36" width="1200" height="74" rx="18" fill="white" stroke="#E5E5EA"/>
+  <text x="76" y="82" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="24" font-weight="800" fill="#1D1D1F">2026 全年任务视图</text>
+  <rect x="1048" y="58" width="80" height="30" rx="15" fill="#F2F2F7"/>
+  <text x="1088" y="78" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="12" fill="#6E6E73">Month</text>
+  <rect x="1138" y="58" width="80" height="30" rx="15" fill="#E8F2FF"/>
+  <text x="1178" y="78" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="12" fill="#007AFF">Year</text>
+
+  <g font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif">
+    <g>
+      <rect x="40" y="132" width="180" height="96" rx="16" fill="white" stroke="#E5E5EA"/>
+      <text x="64" y="166" font-size="16" font-weight="800" fill="#1D1D1F">1月</text>
+      <text x="174" y="166" font-size="13" font-weight="800" fill="#007AFF">2</text>
+      <rect x="64" y="190" width="132" height="7" rx="4" fill="#E5E5EA"/>
+      <rect x="64" y="190" width="92" height="7" rx="4" fill="#34C759"/>
+      <rect x="236" y="132" width="180" height="96" rx="16" fill="white" stroke="#E5E5EA"/>
+      <text x="260" y="166" font-size="16" font-weight="800" fill="#1D1D1F">2月</text>
+      <text x="370" y="166" font-size="13" font-weight="800" fill="#007AFF">4</text>
+      <rect x="260" y="190" width="132" height="7" rx="4" fill="#E5E5EA"/>
+      <rect x="260" y="190" width="110" height="7" rx="4" fill="#34C759"/>
+      <rect x="432" y="132" width="180" height="96" rx="16" fill="white" stroke="#E5E5EA"/>
+      <text x="456" y="166" font-size="16" font-weight="800" fill="#1D1D1F">3月</text>
+      <text x="566" y="166" font-size="13" font-weight="800" fill="#007AFF">5</text>
+      <rect x="456" y="190" width="132" height="7" rx="4" fill="#E5E5EA"/>
+      <rect x="456" y="190" width="124" height="7" rx="4" fill="#34C759"/>
+      <rect x="628" y="132" width="180" height="96" rx="16" fill="white" stroke="#E5E5EA"/>
+      <text x="652" y="166" font-size="16" font-weight="800" fill="#1D1D1F">4月</text>
+      <text x="762" y="166" font-size="13" font-weight="800" fill="#007AFF">8</text>
+      <rect x="652" y="190" width="132" height="7" rx="4" fill="#E5E5EA"/>
+      <rect x="652" y="190" width="98" height="7" rx="4" fill="#34C759"/>
+      <rect x="824" y="132" width="180" height="96" rx="16" fill="white" stroke="#E5E5EA"/>
+      <text x="848" y="166" font-size="16" font-weight="800" fill="#1D1D1F">5月</text>
+      <text x="958" y="166" font-size="13" font-weight="800" fill="#007AFF">9</text>
+      <rect x="848" y="190" width="132" height="7" rx="4" fill="#E5E5EA"/>
+      <rect x="848" y="190" width="86" height="7" rx="4" fill="#34C759"/>
+      <rect x="1020" y="132" width="220" height="96" rx="16" fill="white" stroke="#007AFF"/>
+      <text x="1044" y="166" font-size="16" font-weight="800" fill="#1D1D1F">6月</text>
+      <text x="1196" y="166" font-size="13" font-weight="800" fill="#007AFF">12</text>
+      <rect x="1044" y="190" width="160" height="7" rx="4" fill="#E5E5EA"/>
+      <rect x="1044" y="190" width="124" height="7" rx="4" fill="#34C759"/>
+    </g>
+    <g>
+      <rect x="40" y="244" width="180" height="96" rx="16" fill="white" stroke="#E5E5EA"/>
+      <text x="64" y="278" font-size="16" font-weight="800" fill="#1D1D1F">7月</text>
+      <text x="174" y="278" font-size="13" font-weight="800" fill="#007AFF">7</text>
+      <rect x="64" y="302" width="132" height="7" rx="4" fill="#E5E5EA"/>
+      <rect x="64" y="302" width="58" height="7" rx="4" fill="#34C759"/>
+      <rect x="236" y="244" width="180" height="96" rx="16" fill="white" stroke="#E5E5EA"/>
+      <text x="260" y="278" font-size="16" font-weight="800" fill="#1D1D1F">8月</text>
+      <text x="370" y="278" font-size="13" font-weight="800" fill="#007AFF">3</text>
+      <rect x="260" y="302" width="132" height="7" rx="4" fill="#E5E5EA"/>
+      <rect x="260" y="302" width="30" height="7" rx="4" fill="#34C759"/>
+      <rect x="432" y="244" width="180" height="96" rx="16" fill="white" stroke="#E5E5EA"/>
+      <text x="456" y="278" font-size="16" font-weight="800" fill="#1D1D1F">9月</text>
+      <text x="566" y="278" font-size="13" font-weight="800" fill="#007AFF">1</text>
+      <rect x="456" y="302" width="132" height="7" rx="4" fill="#E5E5EA"/>
+      <rect x="456" y="302" width="20" height="7" rx="4" fill="#34C759"/>
+      <rect x="628" y="244" width="180" height="96" rx="16" fill="white" stroke="#E5E5EA"/>
+      <text x="652" y="278" font-size="16" font-weight="800" fill="#1D1D1F">10月</text>
+      <text x="762" y="278" font-size="13" font-weight="800" fill="#007AFF">0</text>
+      <rect x="652" y="302" width="132" height="7" rx="4" fill="#E5E5EA"/>
+      <rect x="824" y="244" width="180" height="96" rx="16" fill="white" stroke="#E5E5EA"/>
+      <text x="848" y="278" font-size="16" font-weight="800" fill="#1D1D1F">11月</text>
+      <text x="958" y="278" font-size="13" font-weight="800" fill="#007AFF">0</text>
+      <rect x="848" y="302" width="132" height="7" rx="4" fill="#E5E5EA"/>
+      <rect x="1020" y="244" width="220" height="96" rx="16" fill="white" stroke="#E5E5EA"/>
+      <text x="1044" y="278" font-size="16" font-weight="800" fill="#1D1D1F">12月</text>
+      <text x="1196" y="278" font-size="13" font-weight="800" fill="#007AFF">0</text>
+      <rect x="1044" y="302" width="160" height="7" rx="4" fill="#E5E5EA"/>
+    </g>
+  </g>
+
+  <rect x="40" y="380" width="580" height="270" rx="18" fill="white" stroke="#E5E5EA"/>
+  <text x="72" y="422" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="18" font-weight="800" fill="#1D1D1F">6月任务</text>
+  <rect x="72" y="452" width="500" height="54" rx="14" fill="#F9F9FB" stroke="#E5E5EA"/>
+  <text x="96" y="485" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="14" font-weight="700" fill="#1D1D1F">Release worker deployment guide</text>
+  <rect x="72" y="520" width="500" height="54" rx="14" fill="#F9F9FB" stroke="#E5E5EA"/>
+  <text x="96" y="553" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="14" font-weight="700" fill="#1D1D1F">Add yearly task overview</text>
+  <rect x="72" y="588" width="500" height="54" rx="14" fill="#FFF9F0" stroke="#FFE2B8"/>
+  <text x="96" y="621" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="14" font-weight="700" fill="#1D1D1F">Verify delayed project acceptance</text>
+
+  <rect x="660" y="380" width="580" height="270" rx="18" fill="white" stroke="#E5E5EA"/>
+  <text x="692" y="422" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="18" font-weight="800" fill="#1D1D1F">状态汇总</text>
+  <rect x="692" y="462" width="200" height="16" rx="8" fill="#E5E5EA"/>
+  <rect x="692" y="462" width="146" height="16" rx="8" fill="#34C759"/>
+  <text x="916" y="476" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="13" fill="#6E6E73">已完成 32</text>
+  <rect x="692" y="506" width="200" height="16" rx="8" fill="#E5E5EA"/>
+  <rect x="692" y="506" width="84" height="16" rx="8" fill="#007AFF"/>
+  <text x="916" y="520" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="13" fill="#6E6E73">进行中 14</text>
+  <rect x="692" y="550" width="200" height="16" rx="8" fill="#E5E5EA"/>
+  <rect x="692" y="550" width="52" height="16" rx="8" fill="#FF9500"/>
+  <text x="916" y="564" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="13" fill="#6E6E73">验证中 8</text>
+  <rect x="692" y="594" width="200" height="16" rx="8" fill="#E5E5EA"/>
+  <rect x="692" y="594" width="32" height="16" rx="8" fill="#8E8E93"/>
+  <text x="916" y="608" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="13" fill="#6E6E73">待启动 5</text>
+</svg>

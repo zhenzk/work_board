@@ -1,0 +1,4 @@
+﻿ALTER TABLE projects ADD COLUMN status TEXT DEFAULT '';
+ALTER TABLE projects ADD COLUMN priority TEXT DEFAULT '';
+ALTER TABLE projects ADD COLUMN role TEXT DEFAULT '';
+ALTER TABLE projects ADD COLUMN original_end_date TEXT DEFAULT '';

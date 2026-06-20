@@ -1,0 +1,14 @@
+{
+  "name": "kanban-worker",
+  "version": "1.0.0",
+  "description": "Kanban app for Cloudflare Workers and D1",
+  "type": "module",
+  "main": "src/worker.js",
+  "scripts": {
+    "dev": "npx wrangler dev",
+    "deploy": "npx wrangler deploy",
+    "db:create": "npx wrangler d1 create kanban-worker",
+    "db:migrate:local": "npx wrangler d1 migrations apply kanban-worker --local",
+    "db:migrate": "npx wrangler d1 migrations apply kanban-worker --remote"
+  }
+}
