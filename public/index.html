@@ -381,14 +381,16 @@ html[data-theme="dark"] .screen-strip { background:var(--surface); }
   display:flex; gap:10px; overflow-x:auto; padding:4px 2px 8px;
   scroll-behavior:smooth; -webkit-overflow-scrolling:touch;
   scrollbar-width:thin; scrollbar-color:var(--scroll-thumb) transparent;
+  cursor:grab; overscroll-behavior-x:contain; scroll-snap-type:x proximity;
 }
+.proj-grid.dragging { cursor:grabbing; scroll-behavior:auto; user-select:none; }
 .proj-grid::-webkit-scrollbar { height:4px; }
 .proj-grid::-webkit-scrollbar-track { background:transparent; }
 .proj-grid::-webkit-scrollbar-thumb { background:var(--scroll-thumb); border-radius:4px; }
 .proj-card {
   background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
   padding:18px; cursor:pointer; transition:all var(--transition); position:relative; overflow:hidden;
-  flex-shrink:0; width:260px;
+  flex-shrink:0; width:260px; scroll-snap-align:start;
 }
 .proj-card:hover { border-color:var(--border-hover); transform:translateY(-2px); box-shadow:var(--shadow-md); }
 .proj-card:active { transform:translateY(0); }
@@ -970,7 +972,13 @@ function render() {
   const loadingBar = isLoading ? '<div class="loading-bar"></div>' : '';
   if (selectedProjectId) { app.innerHTML = loadingBar + renderProjectDetail(); }
   else { app.innerHTML = loadingBar + renderDashboard(); }
-  updateScrollButtons();
+  initProjectScroller();
+}
+
+function scrollProjects(btn, delta) {
+  const grid = btn.parentElement.querySelector('.proj-grid');
+  if (!grid) return;
+  grid.scrollBy({ left: delta, behavior: 'smooth' });
 }
 
 function updateScrollButtons() {
@@ -982,8 +990,50 @@ function updateScrollButtons() {
   if (!hasOverflow) { leftBtn.style.display = 'none'; rightBtn.style.display = 'none'; return; }
   leftBtn.style.display = grid.scrollLeft > 5 ? 'flex' : 'none';
   rightBtn.style.display = grid.scrollLeft < grid.scrollWidth - grid.clientWidth - 5 ? 'flex' : 'none';
-  // Attach scroll listener for dynamic updates
-  grid.onscroll = updateScrollButtons;
+}
+
+function initProjectScroller() {
+  const grid = document.querySelector('.proj-grid');
+  if (!grid || grid.dataset.scrollerReady === '1') { updateScrollButtons(); return; }
+  grid.dataset.scrollerReady = '1';
+  let startX = 0;
+  let startLeft = 0;
+  let moved = false;
+
+  const endDrag = () => {
+    grid.classList.remove('dragging');
+    if (moved) setTimeout(() => { moved = false; }, 0);
+  };
+
+  grid.addEventListener('pointerdown', (e) => {
+    if (e.button !== undefined && e.button !== 0) return;
+    startX = e.clientX;
+    startLeft = grid.scrollLeft;
+    moved = false;
+    grid.classList.add('dragging');
+    grid.setPointerCapture?.(e.pointerId);
+  });
+  grid.addEventListener('pointermove', (e) => {
+    if (!grid.classList.contains('dragging')) return;
+    const dx = e.clientX - startX;
+    if (Math.abs(dx) > 4) moved = true;
+    grid.scrollLeft = startLeft - dx;
+  });
+  grid.addEventListener('pointerup', endDrag);
+  grid.addEventListener('pointercancel', endDrag);
+  grid.addEventListener('pointerleave', endDrag);
+  grid.addEventListener('click', (e) => {
+    if (!moved) return;
+    e.preventDefault();
+    e.stopPropagation();
+  }, true);
+  grid.addEventListener('wheel', (e) => {
+    if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+    e.preventDefault();
+    grid.scrollBy({ left: e.deltaY, behavior: 'auto' });
+  }, { passive:false });
+  grid.addEventListener('scroll', updateScrollButtons, { passive:true });
+  updateScrollButtons();
 }
 
 function renderLogin() {
@@ -1290,7 +1340,7 @@ function renderProjectCards() {
 
   return `
   <div class="proj-grid-wrap">
-    <button class="proj-scroll-btn left" onclick="this.parentElement.querySelector('.proj-grid').scrollBy({left:-280,behavior:'smooth'})">◀</button>
+    <button class="proj-scroll-btn left" onclick="scrollProjects(this,-280)">◀</button>
     <div class="proj-grid">
     ${enriched.map(p => {
       const pt = p._pt;
@@ -1330,7 +1380,7 @@ function renderProjectCards() {
       </div>`;
     }).join('')}
     </div>
-    <button class="proj-scroll-btn right" onclick="this.parentElement.querySelector('.proj-grid').scrollBy({left:280,behavior:'smooth'})">▶</button>
+    <button class="proj-scroll-btn right" onclick="scrollProjects(this,280)">▶</button>
   </div>`;
 }
 
